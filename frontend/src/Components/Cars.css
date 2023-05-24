@@ -1,0 +1,6 @@
+.pic {
+  transition: all 1.5s;
+}
+.pic:hover {
+  transform: scaleX(-1);
+}
