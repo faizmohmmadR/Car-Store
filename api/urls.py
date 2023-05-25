@@ -13,4 +13,14 @@ router.register(r"chat", ChatViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("admin/", admin.site.urls),
+    path("users",users),
+    path("user/<pk>",user),
+    path("userPost",userPost),
+    path("userUpdate/<pk>",userUpdate),
+    path("userDelete/<pk>",userDelete),
+    path("carDelete/<pk>",carDelete),
+    path("cars",cars),
+    path("car/<pk>",car),
+    path("carPost",carPost),
+    path("carUpdate/<pk>",carUpdate)
 ]
