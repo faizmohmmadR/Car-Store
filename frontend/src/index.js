@@ -14,6 +14,7 @@ import Users from "./Components/Delete";
 import Sign from "./Components/Sign";
 import Regisrer from "./Components/user/Regisrer";
 import Logout, { logout } from "./Components/user/Logout";
+import UpdateCar from "./Components/UpdateCar";
 
 
 const queryClient = new QueryClient();
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
   {
     path: "/logout/",
     element: <Logout/>,
+  },
+  {
+    path: "/update/:id/",
+    element: <UpdateCar/>,
   },
 ]);
 
