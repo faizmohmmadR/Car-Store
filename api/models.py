@@ -3,10 +3,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-def upload_path(instance, filename):
-    return '/'.join(['images', str(instance.userName), filename])
-
-
 class User(models.Model):
     firstName = models.CharField(max_length=50,null=False,blank=False)
     lastName = models.CharField(max_length=50,null=False,blank=False)
@@ -15,7 +11,7 @@ class User(models.Model):
     password = models.CharField(max_length=20,null=False,blank=False)
     userType = models.CharField(max_length=50,null=False,blank=False)
     phone = models.CharField(max_length=50,null=True,blank=True)
-    image = models.ImageField(upload_to=upload_path,null=False,blank=False,default='')
+    image = models.ImageField(upload_to = "useImages/",null=False,blank=False,default='')
     def __str__(self):
         return self.userName
 
@@ -41,7 +37,7 @@ class Car(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ad_user")
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="ad_address")
-    image = models.ImageField(upload_to='image/images',null=False,blank=False,default='')
+    image = models.ImageField(upload_to ="carImages/",null=False,blank=False,default='')
 
     def __str__(self):
         return self.name

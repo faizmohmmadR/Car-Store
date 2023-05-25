@@ -13,7 +13,7 @@ export const getAllCars = async () => {
 };
 
 export const getcar = async (id) => {
-  const { data } = await Api.get(`/car/${id}`);
+  const { data } = await Api.get(`/car/${id}`,id);
   return data;
 };
 
@@ -26,7 +26,7 @@ export const updateCar = async (car) => {
 };
 
 export const deleteCar = async ({ id }) => {
-  return await Api.delete(`/car/${id}`, id);
+  return await Api.delete(`/carDelete/${id}`, id);
 };
 
 export const getUsers = async () => {

@@ -24,12 +24,19 @@ import { Link } from "react-router-dom";
 const UserProfile = () => {
   const queryClient = useQueryClient();
   const { isLoading, isError, error, data } = useQuery("car", getAllCars);
-
   const delet = useMutation(deleteCar, {
     onSuccess: () => {
       queryClient.invalidateQueries("car");
     },
   });
+function deleteCar(){
+  if(window.confirm("Are you sur!") == true){
+    return true
+  }
+  else{
+    return false
+  }
+}
   if (isLoading) {
     return <div>Loading</div>;
   } else if (isError) {
@@ -114,6 +121,7 @@ const UserProfile = () => {
                         <TableCell>{car.user}</TableCell>
                         <TableCell>{car.address}</TableCell>
                         <TableCell>
+                          <Link to={`/update/${car.id}`}>
                           <Button>
                             <EditIcon
                               sx={{
@@ -122,11 +130,12 @@ const UserProfile = () => {
                               }}
                             />
                           </Button>
+                          </Link>
                         </TableCell>
                         <TableCell>
                           <Button>
                             <DeleteIcon
-                              onClick={() => delet.mutate({ id: car.id })}
+                              onClick={() =>{delet.mutate({ id: car.id })}}
                               sx={{
                                 color: "red",
                                 ":hover": { cursor: "pointer" },
