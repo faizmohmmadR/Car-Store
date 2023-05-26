@@ -12,50 +12,52 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Container } from "@mui/system";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { getcar } from "../Api";
+import {useQuery} from 'react-query'
 
-const CarDetail = (props) => {
-  console.log(props.data);
-
-  let description =
-    " This is a good product for all people, all people can buy it is powerfull and it has very little spend it also has different colors for your lovly chose This is a good product for all people, all people can buy it is powerfull and it has very little spend This si a good product for all people, all people can buy it is powerfull and it has very little spend";
-
+const CarDetail = () => {
+  const {id} = useParams();
   const [showFullText, setShowFullText] = useState(false);
-  const toggleShowFullText = () => {
-    setShowFullText(!showFullText);
-  };
 
-  const compresedText = description.slice(0, 20);
+  const {isLoading,isError,error,data} = useQuery(['getcar'],()=>{
+    return getcar(id);
+  })
+  if(isLoading){
+    return <Typography>is Loading</Typography>
+  }else if(isError){
+    return <Typography>{error.message}</Typography>
+  }else{
+
+    let description =data.description;
+    const toggleShowFullText = () => {
+      setShowFullText(!showFullText);
+    };
+    const compresedText = description.slice(0, 20);
+  
   return (
-    <Container lg={12} xs={12} md={12} sm={12}>
-      <Grid Container sx={{ width: "50vw", margin: "0px auto" }}>
-        <Grid
-          item
-          sx={{
-            width: "50vw",
-            height: 300,
-            backgroundColor: "gray",
-            margin: "0px auto",
-          }}
-        >
+    <Grid container item lg={12} xs={12} md={12} sm={12}>
+      <Grid  sx={{ width: "60vw", margin: "0px auto" }}>
+
           <Card>
             <CardMedia
               component="img"
-              src={`${process.env.PUBLIC_URL}/assets/images/pic1.jpg`}
+               src={`${process.env.PUBLIC_URL}/assets/images/pic1.jpg`}
+              // src={data.image}
+              alt={data.image.name}
             />
           </Card>
-        </Grid>
         <Grid
           item
-          marginTop={2}
+          marginTop={1}
           lg={12}
           xs={12}
           md={12}
           sm={12}
-          width={"50vw"}
-          mt={10}
+          width={"100%"}
+          mt={1}
         >
           <Typography variant="h5" padding={2} align="center">
             Car information
@@ -68,9 +70,9 @@ const CarDetail = (props) => {
                     <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>Price</TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>State</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      Seeling State
-                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Seeling State</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Engin Type</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Car Number Pallite</TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>Address</TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>User</TableCell>
                   </TableRow>
@@ -78,12 +80,14 @@ const CarDetail = (props) => {
 
                 <TableBody>
                   <TableRow>
-                    <TableCell>Folder</TableCell>
-                    <TableCell>20000$</TableCell>
-                    <TableCell>New</TableCell>
-                    <TableCell>Sold</TableCell>
-                    <TableCell>Kabul</TableCell>
-                    <TableCell>Faiz</TableCell>
+                    <TableCell>{data.name}</TableCell>
+                    <TableCell>{data.price}</TableCell>
+                    <TableCell>{data.carState}</TableCell>
+                    <TableCell>{data.carSellState}</TableCell>
+                    <TableCell>{data.enginType}</TableCell>
+                    <TableCell>{data.numberPalit}</TableCell>
+                    <TableCell>{data.address}</TableCell>
+                    <TableCell>{data.user}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -102,7 +106,7 @@ const CarDetail = (props) => {
           <Typography variant="h5" padding={2} align="center">
             Car description
           </Typography>
-          <Paper sx={{ minHeight: 200 }}>
+          <Paper sx={{ minHeight: 100 }}>
             <Typography sx={{ float: "left", padding: 1 }}>
               {showFullText ? description : compresedText}
             </Typography>
@@ -118,8 +122,11 @@ const CarDetail = (props) => {
           </Link>
         </Grid>
       </Grid>
-    </Container>
+    </Grid>
   );
 };
+}
 
 export default CarDetail;
+
+ 

@@ -17,22 +17,27 @@ import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import PlaceIcon from "@mui/icons-material/Place";
 import PinIcon from "@mui/icons-material/Pin";
-import FiberNewIcon from "@mui/icons-material/FiberNew";
 import React, { useState } from "react";
 import Select from "@mui/material/Select";
 import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useMutation, useQueryClient } from "react-query";
-import { addCar } from "../Api";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { addCar, getAddress } from "../Api";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Form } from "react-router-dom";
 
 const Add = () => {
-  const token = localStorage.getItem('teken')
+  // const token = localStorage.getItem('teken')
   // use quireClient form caching data
   const queryClient = useQueryClient();
+  const add = useMutation(addCar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("cars");
+    },
+  });
+
+  const {isLoading,isError,error,data} = useQuery('address',getAddress)
 
   // use formik and yup for forms validate and handle forms
   const formik = useFormik({
@@ -49,8 +54,7 @@ const Add = () => {
       address: "",
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values));
-      console.log(values.name);
+      add.mutate(values)
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -94,15 +98,10 @@ const Add = () => {
   const [numberPalitIcon, setNumberPalitIcon] = useState(true);
   const [userIcon, setUserIcon] = useState(true);
   const [addressIcon, setAddressIcon] = useState(true);
-
-  const add = useMutation(addCar, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("cars");
-    },
-  });
-
+  const token = localStorage.getItem('token')
   return (
     <Grid Container>
+      {!token ? (window.location = '/signin/') : (
       <Paper>
         <Box sx={{ ml: 3, mt: 8 }} textAlign="center">
           <Typography
@@ -452,6 +451,7 @@ const Add = () => {
           </form>
         </Box>
       </Paper>
+      )}
     </Grid>
   );
 };

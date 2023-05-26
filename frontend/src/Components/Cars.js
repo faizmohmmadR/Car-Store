@@ -13,8 +13,6 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
-import { Link } from "react-router-dom";
-import CarDetail from "./CarDetail";
 import { Box } from "@mui/system";
 
 const Feed = (props) => {
@@ -31,7 +29,7 @@ console.log(token)
     <Grid item sm={6} xs={12} md={6} lg={4}>
         <Card sx={{ height: "96%" }}>
           <Box  
-          onClick={() =>{{!token ? (window.location = '/signin/')  : (window.location = '/detail/') }}}
+          onClick={() =>{{!token ? (window.location = '/signin/')  : (window.location = `/detail/${car.id}`) }}}
           >
           <CardMedia
             className="pic"

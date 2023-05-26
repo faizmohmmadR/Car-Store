@@ -13,7 +13,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import Users from "./Components/Delete";
 import Sign from "./Components/Sign";
 import Regisrer from "./Components/user/Regisrer";
-import Logout, { logout } from "./Components/user/Logout";
+import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/UpdateCar";
 
 
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/detail/",
+    path: "/detail/:id/",
     element: <CarDetail />,
   },
   {

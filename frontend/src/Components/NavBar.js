@@ -10,15 +10,13 @@ import {
   MenuItem,
   Button,
   TextField,
-  Input,
 } from "@mui/material";
-import { InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import React, { useState } from "react";
-import { Form, Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 
 const StyleToolBar = styled(Toolbar)({
@@ -83,7 +81,7 @@ const NavBar = () => {
             width: "45vw",
           }}
         >
-          <Form autoComplete="off">
+          <form autoComplete="off">
             <TextField
               type="search"
               size="small"
@@ -96,7 +94,6 @@ const NavBar = () => {
                 backgroundColor: "white",
                 opacity: 0.8,
                 width: "45vw",
-
                 height: { lg: "40px", sm: "40px", md: "40px", xs: "39px" },
                 borderRadius: 1.5,
               }}
@@ -122,7 +119,7 @@ const NavBar = () => {
                 ),
               }}
             />
-          </Form>
+          </form>
         </Search>
 
         <Icon>
@@ -165,16 +162,14 @@ const NavBar = () => {
           <MenuItem>Regester</MenuItem>
         </Link>
         {!token ? (
-        <Link to="/signin/" style={{ textDecoration: "none", color: "black" }}>
+        <Link to="/signin/" style={{ textDecoration: "none"}}>
           <MenuItem>Login</MenuItem>
         </Link>
             ) : (
-        <Link  to = '/logout/'>
+        <Link  to = '/logout/' style={{textDecoration: 'none'}}>
         <MenuItem>Logout</MenuItem>
         </Link>
         )}
-
-
       </Menu>
 
       <Menu
