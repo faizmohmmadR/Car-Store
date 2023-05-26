@@ -19,9 +19,6 @@ class User(models.Model):
 
 class Address(models.Model):
     province = models.CharField(max_length=20)
-    district = models.CharField(max_length=20)
-    area = models.CharField(max_length=40)
-
     def __str__(self):
         return self.province
     

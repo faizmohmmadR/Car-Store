@@ -37,5 +37,9 @@ export const getUsers = async () => {
 export const addUser = async (user) => {
   return await Api.post("/user/", user);
 };
+export const getAddress = async () =>{
+  const {data}  = await Api.get('/address/')
+  return data
+}
 
 export default Api;

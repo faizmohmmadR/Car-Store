@@ -12,16 +12,15 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import Product from "../Delete";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getAllCars, deleteCar } from "../../Api";
-import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 
 const UserProfile = () => {
+  const token = localStorage.getItem('token')
   const queryClient = useQueryClient();
   const { isLoading, isError, error, data } = useQuery("car", getAllCars);
   const delet = useMutation(deleteCar, {
@@ -29,14 +28,6 @@ const UserProfile = () => {
       queryClient.invalidateQueries("car");
     },
   });
-function deleteCar(){
-  if(window.confirm("Are you sur!") == true){
-    return true
-  }
-  else{
-    return false
-  }
-}
   if (isLoading) {
     return <div>Loading</div>;
   } else if (isError) {
@@ -44,6 +35,7 @@ function deleteCar(){
   }
   return (
     <Grid bgcolor={"background.default"} color={"text.primary"} fullWidth>
+      {!token ? (window.location = '/signin/') : (
       <Grid container>
         <Grid lg={12} xs={12} sm={12} md={12}>
           <Card sx={{ margin: "0px auto", padding: 2, bgcolor: "gray" }}>
@@ -162,6 +154,7 @@ function deleteCar(){
           </Link>
         </Grid>
       </Grid>
+      )}
     </Grid>
   );
 };

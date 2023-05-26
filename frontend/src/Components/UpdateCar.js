@@ -136,7 +136,6 @@ const UpdateCar = () => {
               size="small"
               type="text"
               name="name"
-              onChange={formik.values.name}
               // formik for handle forms
               {...formik.getFieldProps("name")}
               value={data.name}

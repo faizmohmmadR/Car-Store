@@ -17,6 +17,7 @@ import axios from "axios";
 const SignIn = () => {
 
   const [errors, setErrors] = useState('')
+  const [sending,setSending] = useState(false)
 const formik = useFormik({
   initialValues: {
     email: '',
@@ -24,11 +25,14 @@ const formik = useFormik({
   },
   onSubmit: async (values) =>{
     try {
+      setSending(true)
       const result = await axios.post('https://reqres.in/api/login',values)
+      setSending(false)
       localStorage.setItem('token',result.data.token)
       window.location = '/'
     } catch (error) {
       setErrors('Email or password is not correct!')
+      setSending(false)
     }
   },
   validationSchema: Yup.object({
@@ -147,6 +151,7 @@ const formik = useFormik({
                 sx={{ width: 147, ml: 1 }}
                 endIcon={<SendIcon />}
                 type="submit"
+                disabled = {sending}
                 
               >
                 Submet
