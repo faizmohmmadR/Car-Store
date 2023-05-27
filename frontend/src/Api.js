@@ -13,7 +13,7 @@ export const getAllCars = async () => {
 };
 
 export const getcar = async (id) => {
-  const { data } = await Api.get(`/car/${id}`,id);
+  const { data } = await Api.get(`/car/${id}`, id);
   return data;
 };
 
@@ -37,9 +37,9 @@ export const getUsers = async () => {
 export const addUser = async (user) => {
   return await Api.post("/user/", user);
 };
-export const getAddress = async () =>{
-  const {data}  = await Api.get('/address/')
-  return data
-}
+export const getAddress = async () => {
+  const { data } = await Api.get("/address/");
+  return data;
+};
 
 export default Api;

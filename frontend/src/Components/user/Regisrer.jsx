@@ -31,20 +31,21 @@ const Regisrer = () => {
   const [last_name, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setImage] = useState();
-  const [users , setUser] = useState([])
-
-  
-
+  const [users, setUser] = useState([]);
 
   const handleSubmit = async (e) => {
-    const res = await axios.post('https://reqres.in/api/users',{first_name,last_name,email,avatar})
-    console.log(res)
+    const res = await axios.post("https://reqres.in/api/users", {
+      first_name,
+      last_name,
+      email,
+      avatar,
+    });
+    console.log(res);
 
     setEmail("");
     setFirstName("");
     setLastName("");
     setImage("");
-
   };
 
   const handleReset = () => {
@@ -54,13 +55,13 @@ const Regisrer = () => {
     setImage("");
   };
 
-  useEffect(()=>{
-    const getUser = async () =>{
-      const result = await axios.get('https://reqres.in/api/users')
-      setUser(result.data.data)
-    }
-    getUser()
-  },[])
+  useEffect(() => {
+    const getUser = async () => {
+      const result = await axios.get("https://reqres.in/api/users");
+      setUser(result.data.data);
+    };
+    getUser();
+  }, []);
 
   // define state for visible and unVisible icons in text field
 
@@ -175,7 +176,9 @@ const Regisrer = () => {
               onChange={(e) => setImage({ avatar: e.target.files[0] })}
               style={{ marginTop: 10 }}
             />
-            <Button type="submit" variant="outlined">Submit</Button>
+            <Button type="submit" variant="outlined">
+              Submit
+            </Button>
           </Form>
           <Box
             sx={{
@@ -196,12 +199,14 @@ const Regisrer = () => {
         </Box>
       </Box>
       <Box>
-      {users.map((user,i)=>(
-        <>
-        <li>{user.first_name} --- {user.last_name}</li>
-        <p>{user.email}</p>
-        </>
-      ))}
+        {users.map((user, i) => (
+          <>
+            <li>
+              {user.first_name} --- {user.last_name}
+            </li>
+            <p>{user.email}</p>
+          </>
+        ))}
       </Box>
     </Grid>
   );

@@ -12,34 +12,38 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import { Form, Link } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import axios from "axios";
 const SignIn = () => {
-
-  const [errors, setErrors] = useState('')
-  const [sending,setSending] = useState(false)
-const formik = useFormik({
-  initialValues: {
-    email: '',
-    password: '',
-  },
-  onSubmit: async (values) =>{
-    try {
-      setSending(true)
-      const result = await axios.post('https://reqres.in/api/login',values)
-      setSending(false)
-      localStorage.setItem('token',result.data.token)
-      window.location = '/'
-    } catch (error) {
-      setErrors('Email or password is not correct!')
-      setSending(false)
-    }
-  },
-  validationSchema: Yup.object({
-    email: Yup.string().email('Not correct email format').required('Email is required'),
-    password: Yup.string().max(16,'password cant be more than 16 chracters').min(6,'password cant be less than 6 characters').required('Password is required'),
-  })
-})
+  const [errors, setErrors] = useState("");
+  const [sending, setSending] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: async (values) => {
+      try {
+        setSending(true);
+        const result = await axios.post("https://reqres.in/api/login", values);
+        setSending(false);
+        localStorage.setItem("token", result.data.token);
+        window.location = "/";
+      } catch (error) {
+        setErrors("Email or password is not correct!");
+        setSending(false);
+      }
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email("Not correct email format")
+        .required("Email is required"),
+      password: Yup.string()
+        .max(16, "password cant be more than 16 chracters")
+        .min(6, "password cant be less than 6 characters")
+        .required("Password is required"),
+    }),
+  });
 
   // define state for visible and unVisible icons in the text box
   const [emailIcon, setEmailIcon] = useState(true);
@@ -68,15 +72,17 @@ const formik = useFormik({
           <LockOpenIcon sx={{ fontSize: "40px" }} />
           <Typography variant="h6">Sign In</Typography>
         </Box>
-        <Typography color={'red'} fontSize={'12px'}>{errors}</Typography>
+        <Typography color={"red"} fontSize={"12px"}>
+          {errors}
+        </Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <form  autoComplete="off" onSubmit={formik.handleSubmit}>
+          <form autoComplete="off" onSubmit={formik.handleSubmit}>
             <TextField
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="Email"
               type="email"
-              {...formik.getFieldProps('email')}
+              {...formik.getFieldProps("email")}
               onFocus={() => {
                 setEmailIcon(false);
               }}
@@ -97,13 +103,18 @@ const formik = useFormik({
                 ),
               }}
             />
-            {formik.touched.email && (formik.errors.email ? (<Typography color={'red'} fontSize={'12px'}>{formik.errors.email}</Typography>)  : null)}
+            {formik.touched.email &&
+              (formik.errors.email ? (
+                <Typography color={"red"} fontSize={"12px"}>
+                  {formik.errors.email}
+                </Typography>
+              ) : null)}
             <TextField
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="Password"
               type="password"
-              {...formik.getFieldProps('password')}
+              {...formik.getFieldProps("password")}
               onFocus={() => {
                 setPasswordIcon(false);
               }}
@@ -115,7 +126,7 @@ const formik = useFormik({
                   <>
                     {passwordIcon ? (
                       <InputAdornment position="start">
-                        <LockIcon/>
+                        <LockIcon />
                       </InputAdornment>
                     ) : (
                       ""
@@ -129,7 +140,11 @@ const formik = useFormik({
                 ),
               }}
             />
-            {formik.touched.password &&formik.errors.password ? (<Typography color={'red'} fontSize={'12px'}>{formik.errors.password}</Typography>) : null}
+            {formik.touched.password && formik.errors.password ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {formik.errors.password}
+              </Typography>
+            ) : null}
             <Box
               sx={{
                 display: "flex",
@@ -151,8 +166,7 @@ const formik = useFormik({
                 sx={{ width: 147, ml: 1 }}
                 endIcon={<SendIcon />}
                 type="submit"
-                disabled = {sending}
-                
+                disabled={sending}
               >
                 Submet
               </Button>

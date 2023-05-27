@@ -1,11 +1,10 @@
-import React from 'react'
+import React from "react";
 
 const Logout = () => {
+  localStorage.removeItem("token");
+  window.location = "/signin/";
 
-    localStorage.removeItem('token')
-    window.location = '/signin/'
-    
-  return null
-}
+  return null;
+};
 
-export default Logout
+export default Logout;
