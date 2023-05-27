@@ -16,7 +16,6 @@ import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/UpdateCar";
 
-
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -49,7 +48,7 @@ const router = createBrowserRouter([
   {
     path: "/signin/",
     element: <SignIn />,
-  },/////////////////////////////////// testing
+  }, /////////////////////////////////// testing
   {
     path: "/del/",
     element: <Users />,
@@ -60,15 +59,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/reg/",
-    element: <Regisrer/>,
+    element: <Regisrer />,
   },
   {
     path: "/logout/",
-    element: <Logout/>,
+    element: <Logout />,
   },
   {
     path: "/update/:id/",
-    element: <UpdateCar/>,
+    element: <UpdateCar />,
   },
 ]);
 

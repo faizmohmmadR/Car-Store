@@ -22,15 +22,21 @@ const Feed = (props) => {
   const handleFlip = (id) => {
     setIsFlipped(!isFlipped);
   };
-  
-  const token =   localStorage.getItem('token');
-console.log(token)
+
+  const token = localStorage.getItem("token");
+  console.log(token);
   return (
     <Grid item sm={6} xs={12} md={6} lg={4}>
-        <Card sx={{ height: "96%" }}>
-          <Box  
-          onClick={() =>{{!token ? (window.location = '/signin/')  : (window.location = `/detail/${car.id}`) }}}
-          >
+      <Card sx={{ height: "96%" }}>
+        <Box
+          onClick={() => {
+            {
+              !token
+                ? (window.location = "/signin/")
+                : (window.location = `/detail/${car.id}`);
+            }
+          }}
+        >
           <CardMedia
             className="pic"
             style={{
@@ -41,7 +47,7 @@ console.log(token)
             component="img"
             height="194px"
             width="100vw"
-            sx={{width: '100%'}}
+            sx={{ width: "100%" }}
             alt={car.name}
             src={car.image}
             onMouseOver={handleFlip}
@@ -59,34 +65,34 @@ console.log(token)
                 : `${car.description.slice(0, 70)}...`}
             </Typography>
           </CardContent>
-          </Box>
-          <CardActions
-            disableSpacing
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "row",
-            }}
+        </Box>
+        <CardActions
+          disableSpacing
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "row",
+          }}
+        >
+          <IconButton aria-label="add to favorites">
+            <Checkbox
+              icon={<FavoriteBorder />}
+              checkedIcon={<Favorite sx={{ color: "red" }} />}
+            />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+          <Typography
+            flex={2}
+            sx={{ direction: "rtl" }}
+            variant="h5"
+            color="green"
           >
-            <IconButton aria-label="add to favorites">
-              <Checkbox
-                icon={<FavoriteBorder />}
-                checkedIcon={<Favorite sx={{ color: "red" }} />}
-              />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
-            <Typography
-              flex={2}
-              sx={{ direction: "rtl" }}
-              variant="h5"
-              color="green"
-            >
-              {car.price}$
-            </Typography>
-          </CardActions>
-        </Card>
+            {car.price}$
+          </Typography>
+        </CardActions>
+      </Card>
     </Grid>
   );
 };

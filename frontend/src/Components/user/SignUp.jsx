@@ -64,8 +64,8 @@ const For = () => {
     data.append("phone", phone);
     data.append("password", password);
     data.append("userType", userType);
-    const res =  add.mutate(data);
-    console.log(res)
+    const res = add.mutate(data);
+    console.log(res);
 
     setEmail("");
     setFirstName("");

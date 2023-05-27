@@ -16,7 +16,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import React, { useState } from "react";
-import {Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 
 const StyleToolBar = styled(Toolbar)({
@@ -52,7 +52,7 @@ const UserBox = styled(Box)(({ theme }) => ({
   },
 }));
 const NavBar = () => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem("token");
   const [searchIconVisible, setSearchIconVisible] = useState(true);
   const [open, setOpen] = useState(false);
   const [openSidBar, setOpenSideBar] = useState(false);
@@ -123,14 +123,18 @@ const NavBar = () => {
         </Search>
 
         <Icon>
-          {!token ? (<Box width={'15%'}></Box>) : (<>
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-          <Badge badgeContent={2} color="error">
-            <NotificationsNoneIcon />
-          </Badge>
-          </>)}
+          {!token ? (
+            <Box width={"15%"}></Box>
+          ) : (
+            <>
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+              <Badge badgeContent={2} color="error">
+                <NotificationsNoneIcon />
+              </Badge>
+            </>
+          )}
           <Badge>
             <Avatar
               sx={{ width: "30px", height: "30px" }}
@@ -162,13 +166,13 @@ const NavBar = () => {
           <MenuItem>Regester</MenuItem>
         </Link>
         {!token ? (
-        <Link to="/signin/" style={{ textDecoration: "none"}}>
-          <MenuItem>Login</MenuItem>
-        </Link>
-            ) : (
-        <Link  to = '/logout/' style={{textDecoration: 'none'}}>
-        <MenuItem>Logout</MenuItem>
-        </Link>
+          <Link to="/signin/" style={{ textDecoration: "none" }}>
+            <MenuItem>Login</MenuItem>
+          </Link>
+        ) : (
+          <Link to="/logout/" style={{ textDecoration: "none" }}>
+            <MenuItem>Logout</MenuItem>
+          </Link>
         )}
       </Menu>
 
