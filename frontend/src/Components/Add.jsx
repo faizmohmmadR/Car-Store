@@ -30,6 +30,8 @@ import * as Yup from "yup";
 const Add = () => {
   // const token = localStorage.getItem('teken')
   // use quireClient form caching data
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState("");
   const queryClient = useQueryClient();
   const add = useMutation(addCar, {
     onSuccess: () => {
@@ -54,7 +56,27 @@ const Add = () => {
       address: "",
     },
     onSubmit: (values) => {
-      add.mutate(values);
+      try {
+        setSending(true);
+        let data = new FormData();
+        for (let i = 0; i < values.image.length; i++) {
+          data.append("image", values.image[i], values.image[i].name);
+        }
+        data.append("name", values.name);
+        data.append("description", values.description);
+        data.append("price", values.price);
+        data.append("enginType", values.enginType);
+        data.append("numberPalit", values.numberPalit);
+        data.append("carState", values.carState);
+        data.append("carSellState", values.carSellState);
+        data.append("user", values.user);
+        data.append("address", values.address);
+        const res = add.mutate(data);
+        setSending(false);
+      } catch (error) {
+        setErrors(error);
+        setSending(false);
+      }
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -81,11 +103,11 @@ const Add = () => {
       image: Yup.string().required("Image is requred"),
       user: Yup.string()
         .max(20, "User name cant be more than 20 chracters")
-        .min(3, "Use name cant be less than 3 charecters")
+        .min(1, "Use name cant be less than 3 charecters")
         .required("User is required"),
       address: Yup.string()
         .max(30, "Address cant be more than 30 charecters")
-        .min(5, "Address cant be less than 5 charecters")
+        .min(1, "Address cant be less than 5 charecters")
         .required("Address is required"),
     }),
   });
@@ -114,11 +136,14 @@ const Add = () => {
             >
               Add Car
             </Typography>
+            <Typography sx={{ color: "red", fontSize: "12px" }}>
+              {errors}
+            </Typography>
             <form
               onSubmit={formik.handleSubmit}
               autoComplete="off"
               method="post"
-              enctype="multipart/form-data"
+              encType="multipart/form-data"
             >
               <TextField
                 sx={{ mt: 1.5 }}
@@ -158,10 +183,14 @@ const Add = () => {
               <TextField
                 fullWidth
                 size="small"
+                accept="image/*"
+                name="image"
                 style={{ marginTop: 5 }}
                 type="file"
                 // formik for handle forms
-                {...formik.getFieldProps("image")}
+                onChange={(e) =>
+                  formik.setFieldValue("image", e.currentTarget.files[0])
+                }
               />
               {formik.touched.image &&
                 (formik.errors.image ? (
@@ -451,6 +480,7 @@ const Add = () => {
                   endIcon={<SendIcon />}
                   type="submit"
                   onSubmit={formik.handleSubmit}
+                  disabled={sending}
                 >
                   Submet
                 </Button>
