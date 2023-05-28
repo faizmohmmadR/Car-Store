@@ -8,6 +8,8 @@ import {
   InputLabel,
   Grid,
 } from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 // import icons
@@ -23,70 +25,83 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { InputAdornment } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 
-import { Form, Link } from "react-router-dom";
-import { userSchema } from "../validation/Validation";
 import { useQueryClient, useMutation } from "react-query";
 import { addUser } from "../../Api";
-const For = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [image, setImage] = useState();
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
-  const [errors, setError] = useState([]);
+import { Link } from "react-router-dom";
+
+const SignUp = () => {
+  const [errors, setErrors] = useState("");
+  const [sending, setSending] = useState(false);
 
   const queryClient = useQueryClient();
-
   const add = useMutation(addUser, {
     onSuccess: () => {
       queryClient.invalidateQueries("user");
     },
   });
 
-  const eLength = errors.length;
-  console.log(eLength);
+  // validation using formik and yup
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      userName: "",
+      email: "",
+      phone: "",
+      image: "",
+      password: "",
+      userType: "",
+    },
+    onSubmit: (values) => {
+      // state for disable the send button
+      setSending(true);
+      try {
+        let data = new FormData();
+        for (let i = 0; i < values.image.length; i++) {
+          data.append("image", values.image[i], values.image[i].name);
+        }
+        data.append("firstName", values.firstName);
+        data.append("lastName", values.lastName);
+        data.append("userName", values.userName);
+        data.append("email", values.email);
+        data.append("phone", values.phone);
+        data.append("password", values.password);
+        data.append("userType", values.userType);
+        add.mutate(data);
 
-  const handleSubmit = async (e) => {
-    let data = new FormData();
-    e.preventDefault();
-    console.log(image);
-    for (let i = 0; i < image.length; i++) {
-      data.append("image", image[i], image[i].name);
-    }
-
-    data.append("firstName", firstName);
-    data.append("lastName", lastName);
-    data.append("userName", userName);
-    data.append("email", email);
-    data.append("phone", phone);
-    data.append("password", password);
-    data.append("userType", userType);
-    const res = add.mutate(data);
-    console.log(res);
-
-    setEmail("");
-    setFirstName("");
-    setPhone("");
-    setLastName("");
-    setUserName("");
-    setImage("");
-    setPassword("");
-    setUserType("");
-  };
-
-  const handleReset = () => {
-    setEmail("");
-    setFirstName("");
-    setPhone("");
-    setLastName("");
-    setUserName("");
-    setImage("");
-    setPassword("");
-    setUserType("");
-  };
+        setSending(false);
+      } catch (error) {
+        setErrors(error);
+        setSending(false);
+      }
+      formik.values.name = "";
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .max(15, "First Name at must be 15 characters")
+        .min(3, "First Name at last be 3 characters")
+        .required("First Name is required"),
+      lastName: Yup.string()
+        .max(15, "Last Name at must be 15 characters")
+        .min(3, "Last Name at last be 3 characters")
+        .required("Last Name is required"),
+      userName: Yup.string()
+        .max(15, "User Name at must be 15 characters")
+        .min(3, "User Name at last be 3 characters")
+        .required("User Name is required"),
+      email: Yup.string().email("Invalid emial").required("Email is required"),
+      phone: Yup.string()
+        .max(12, "Phone number at must be 12 numbers")
+        .min(10, "Phone number at last be 10 numbers")
+        .required("Phone number is required"),
+      password: Yup.string()
+        .min(6, "Password at last be 6 characters")
+        .max(12, " Password at must be 12 characters")
+        .required("Password is required"),
+      userType: Yup.string().required(" User Type is required"),
+      image: Yup.string().required("image is required"),
+    }),
+  });
 
   // define state for visible and unVisible icons in text field
 
@@ -98,7 +113,7 @@ const For = () => {
   const [passwordIcon, setPasswordIcon] = useState(true);
 
   return (
-    <Grid container>
+    <Grid container item>
       <Box
         sx={{ width: 600, margin: "0px auto" }}
         bgcolor={"background.default"}
@@ -113,20 +128,27 @@ const For = () => {
         >
           <PersonAddIcon sx={{ fontSize: "40px" }} />
           <Typography variant="h5">Sign Up</Typography>
+          <Typography color={"red"} fontSize={"12px"}>
+            {errors}
+          </Typography>
         </Box>
         <Box>
-          <Form encType="multipart/form-data" onSubmit={handleSubmit}>
+          <form
+            onSubmit={formik.handleSubmit}
+            autoComplete="off"
+            method="psot"
+            encType="multipart/form-data"
+          >
             <TextField
               sx={{ mt: 1.5, width: 600 }}
               size="small"
               label="First Name"
               type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              {...formik.getFieldProps("firstName")}
               onFocus={() => {
                 setFirstNameIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setFirstNameIcon(true);
               }}
               InputProps={{
@@ -143,17 +165,23 @@ const For = () => {
                 ),
               }}
             />
+            {formik.touched.firstName && formik.errors.firstName ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.firstName}{" "}
+              </Typography>
+            ) : null}
             <TextField
               sx={{ mt: 1.5, width: 600 }}
               size="small"
               label="Last Name"
               type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              name="lastName"
+              {...formik.getFieldProps("lastName")}
               onFocus={() => {
                 setLastNameIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setLastNameIcon(true);
               }}
               InputProps={{
@@ -170,20 +198,23 @@ const For = () => {
                 ),
               }}
             />
+            {formik.touched.lastName && formik.errors.lastName ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.lastName}{" "}
+              </Typography>
+            ) : null}
             <TextField
               sx={{ mt: 1.5, width: 600 }}
-              autoComplete
               size="small"
               label="userName"
               type="numbNer"
-              value={userName}
-              onChange={(e) => {
-                setUserName(e.target.value);
-              }}
+              name="userName"
+              {...formik.getFieldProps("userName")}
               onFocus={() => {
                 setUserNameIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setUserNameIcon(true);
               }}
               InputProps={{
@@ -200,17 +231,22 @@ const For = () => {
                 ),
               }}
             />
+            {formik.touched.userName && formik.errors.userName ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.userName}{" "}
+              </Typography>
+            ) : null}
             <TextField
               sx={{ mt: 1.5, width: 600 }}
               size="small"
               label="Email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...formik.getFieldProps("email")}
               onFocus={() => {
                 setEmailIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setEmailIcon(true);
               }}
               InputProps={{
@@ -227,19 +263,24 @@ const For = () => {
                 ),
               }}
             />
+            {formik.touched.email && formik.errors.email ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.email}{" "}
+              </Typography>
+            ) : null}
+
             <TextField
               sx={{ mt: 1.5, width: 600 }}
               size="small"
               label="Phone"
-              type="text"
-              value={phone}
-              onChange={(e) => {
-                setPhone(e.target.value);
-              }}
+              type="tel"
+              name="phone"
+              {...formik.getFieldProps("phone")}
               onFocus={() => {
                 setPhoneIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setPhoneIcon(true);
               }}
               InputProps={{
@@ -256,28 +297,39 @@ const For = () => {
                 ),
               }}
             />
+            {formik.touched.phone && formik.errors.phone ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.phone}{" "}
+              </Typography>
+            ) : null}
             <TextField
-              size="small"
-              sx={{ mt: 1.5, width: 600 }}
+              sx={{ width: 600, mt: 1.5 }}
               type="file"
-              accept="image/jpeg,image/png,image/gif"
-              onChange={(e) => setImage({ image: e.target.files[0] })}
-              style={{ marginTop: 10 }}
+              accept="image/*"
+              size="small"
+              name="image"
+              id="image"
+              onChange={(e) =>
+                formik.setFieldValue("image", e.currentTarget.files[0])
+              }
             />
+            {formik.touched.image && formik.errors.image ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.image}{" "}
+              </Typography>
+            ) : null}
             <TextField
               sx={{ mt: 1.5, width: 600 }}
               size="small"
               label="password"
               type="password"
-              autoComplete="on"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              {...formik.getFieldProps("password")}
               onFocus={() => {
                 setPasswordIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setPasswordIcon(true);
               }}
               InputProps={{
@@ -300,25 +352,54 @@ const For = () => {
                 ),
               }}
             />
+            {formik.touched.password && formik.errors.password ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.password}{" "}
+              </Typography>
+            ) : null}
             <FormControl
               label="user Type"
               size="small"
+              id="userType"
               sx={{ mt: 1.5 }}
               fullWidth
             >
               <InputLabel>User Type</InputLabel>
               <Select
-                value={userType}
-                onChange={(e) => {
-                  setUserType(e.target.value);
-                }}
+                name="userType"
+                id="userType"
+                {...formik.getFieldProps("userType")}
               >
                 <MenuItem value="Admin">Admin</MenuItem>
                 <MenuItem value="normal user">normal user</MenuItem>
               </Select>
             </FormControl>
-            <Button type="submit">Submit</Button>
-          </Form>
+            {formik.touched.userType && formik.errors.userType ? (
+              <Typography color={"red"} fontSize={"12px"}>
+                {" "}
+                {formik.errors.userType}{" "}
+              </Typography>
+            ) : null}
+
+            <Button
+              variant="outlined"
+              sx={{ width: 297, mt: 1.5, borderRadius: 0 }}
+              startIcon={<RestartAltIcon />}
+              type="reset"
+            >
+              Reset
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ width: 297, ml: 0.5, mt: 1.5, borderRadius: 0 }}
+              endIcon={<SendIcon />}
+              type="submit"
+              disabled={sending}
+            >
+              Submet
+            </Button>
+          </form>
           <Box
             sx={{
               display: "flex",
@@ -341,4 +422,4 @@ const For = () => {
   );
 };
 
-export default For;
+export default SignUp;
