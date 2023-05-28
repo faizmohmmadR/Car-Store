@@ -6,6 +6,7 @@ import { Stack } from "@mui/system";
 import AddCarButton from "./Components/AddCarButton";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
+import Footer from "./Components/footer/Footer";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -35,6 +36,7 @@ function App() {
           </Grid>
         </Stack>
         <AddCarButton />
+        <Footer/>
       </Box>
     </ThemeProvider>
   );

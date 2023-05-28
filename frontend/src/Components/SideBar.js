@@ -19,11 +19,9 @@ import { Link } from "react-router-dom";
 const SideBar = ({ mode, setMode }) => {
   return (
     <Paper
-      mt={6}
       bgcolor="skypeblue"
       flex={1}
-      p={2}
-      sx={{ display: { xs: "none", sm: "block" }, width: "25%", mt: 7 }}
+      sx={{ display: { xs: "none", sm: "block" }, width: "25%", mt: 7,minHeight: '100vh' }}
     >
       <Box position="fixed">
         <List>
