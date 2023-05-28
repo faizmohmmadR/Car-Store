@@ -1,7 +1,7 @@
 import RightBar from "./Components/RightBar";
 import SideBar from "./Components/SideBar";
 import NavBar from "./Components/NavBar";
-import { Box, createTheme, Grid, ThemeProvider } from "@mui/material";
+import { Box, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
 import { Stack } from "@mui/system";
 import AddCarButton from "./Components/AddCarButton";
 import { Outlet } from "react-router-dom";
@@ -20,7 +20,14 @@ function App() {
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <NavBar />
         <Stack direction="row" spacing={2} justifyContent="space-between">
-          <SideBar setMode={setMode} mode={mode} />
+          <Paper
+            mt={6}
+            bgcolor="skypeblue"
+            flex={1}
+            sx={{ display: { xs: "none", sm: "block" }, width: "25%", mt: 7 }}
+          >
+            <SideBar setMode={setMode} mode={mode} />
+          </Paper>
           <Grid
             item
             sm={12}

@@ -10,13 +10,18 @@ import {
   MenuItem,
   Button,
   TextField,
+  Grid,
+  Paper,
+  Modal,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import SideBar from "./SideBar";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 
 const StyleToolBar = styled(Toolbar)({
@@ -124,7 +129,7 @@ const NavBar = () => {
 
         <Icon>
           {!token ? (
-            <Box width={"15%"}></Box>
+            <Box width={"15%"} component="div"></Box>
           ) : (
             <>
               <Badge badgeContent={4} color="error">
@@ -175,20 +180,31 @@ const NavBar = () => {
           </Link>
         )}
       </Menu>
-
-      <Menu
-        aria-labelledby="demo-positioned-button"
+      <Modal
         open={openSidBar}
-        onClose={(e) => setOpenSideBar(false)}
-        anchorOrigin={{
-          vertical: "center",
-          horizontal: "left",
+        onClose={(e) => {
+          setOpenSideBar(false);
         }}
-        transformOrigin={{
-          vertical: "center",
-          horizontal: "left",
-        }}
-      ></Menu>
+      >
+        <Paper
+          sx={{
+            display: { xs: "block", sm: "none" },
+            backgroundColor: "white",
+            width: "250px",
+            height: "100%",
+          }}
+        >
+          <Box sx={{ display: "flex" }}>
+            <CloseIcon
+              onClick={() => {
+                setOpenSideBar(false);
+              }}
+              sx={{ border: "1px solid red", ml: 26, mt: 1, fontSize: "25px" }}
+            />
+            <SideBar />
+          </Box>
+        </Paper>
+      </Modal>
     </AppBar>
   );
 };
