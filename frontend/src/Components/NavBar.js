@@ -67,7 +67,6 @@ const NavBar = (props) => {
   const [openSidBar, setOpenSideBar] = useState(false);
   const [search, setSearch] = useState("");
   const [openSearch, setOpenSearch] = useState(false);
-  const [notFound, setNotFound] = useState("");
 
   const onSearch = (searchTertm) => {
     setOpenSearch(true);
@@ -107,7 +106,7 @@ const NavBar = (props) => {
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
-              width: { lg: "45vw", md: "60vw", sm: "55vw", xs: "70vw" },
+              width: {lg: "45vw",md: '60vw',sm: '55vw',xs: '70vw'},
             }}
           >
             <form autoComplete="off">
@@ -124,7 +123,7 @@ const NavBar = (props) => {
                   opacity: 0.8,
                   width: "45vw",
                   height: { lg: "40px", sm: "40px", md: "40px", xs: "39px" },
-                  width: { lg: "45vw", md: "60vw", sm: "55vw", xs: "70vw" },
+                  width: {lg: "45vw",md: '60vw',sm: '55vw',xs: '70vw'},
                   borderRadius: 1.5,
                 }}
                 InputProps={{
@@ -218,11 +217,11 @@ const NavBar = (props) => {
                   setOpenSideBar(false);
                 }}
                 sx={{
-                  borderRadius: "50px",
-                  backgroundColor: "red",
+                  borderRadius: '50px',
+                  backgroundColor: 'red',
                   ml: 26,
                   mt: 1,
-                  fontSize: "30px",
+                  fontSize: "25px",
                 }}
               />
               <SideBar />
@@ -233,6 +232,7 @@ const NavBar = (props) => {
           open={openSearch}
           onClose={() => {
             setOpenSearch(false);
+            
           }}
           sx={{
             overflowX: "hidden",
@@ -245,31 +245,33 @@ const NavBar = (props) => {
         >
           <Paper
             sx={{
-              width: 600,
+              width: 650,
+
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               margin: "0px auto",
               backgroundColor: "white",
-              height: "20px",
             }}
           >
             <Typography align="end">
               <CloseIcon
-                onClick={() => {
-                  setOpenSearch(false);
-                  setSearch("");
-                }}
+                onClick={() => 
+                  {
+                    setOpenSearch(false)
+                    setSearch('')
+                  
+                  }}
                 sx={{
                   color: "white",
                   backgroundColor: "red",
                   borderRadius: "50px",
-                  position: "fixed",
+                  position: 'fixed',
                 }}
               />
             </Typography>
 
-            <Box component="div" sx={{ width: 350, margin: "0px auto", mt: 2 }}>
+            <Box component="div" sx={{ width: 300, margin: "0px auto", mt: 2 }}>
               {data
                 .filter((item) => {
                   const searchTertm = search.toLowerCase();
@@ -282,6 +284,7 @@ const NavBar = (props) => {
                       onClick={() => {
                         onSearch(car.carName);
                       }}
+                      key={car.id}
                       car={car}
                     />
                   </Paper>
