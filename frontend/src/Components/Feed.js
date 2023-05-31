@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { getAllCars } from "../Api";
 
 const Feed = () => {
+  localStorage.setItem('redirectURL',window.location.href)
   const { isLoading, isError, error, data, isSuccess } = useQuery(
     "car",
     getAllCars

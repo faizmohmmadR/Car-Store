@@ -188,7 +188,7 @@ const NavBar = (props) => {
             <MenuItem>Regester</MenuItem>
           </Link>
           {!token ? (
-            <Link to="/signin/" style={{ textDecoration: "none" }}>
+            <Link to="/signin/:id/" style={{ textDecoration: "none" }}>
               <MenuItem>Login</MenuItem>
             </Link>
           ) : (

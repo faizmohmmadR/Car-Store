@@ -9,12 +9,23 @@ import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
+import { useNavigate } from "react-router-dom";
 import { Form, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 const SignIn = () => {
+  const id = useParams()
+  //get redurec url 
+  const redirectURL = localStorage.getItem('redirectURL')
+  // add page url 
+  const addPageUrl = 'http://localhost:3000/Add'
+  // carDetail page url 
+  const carDetailUrl = `http://localhost:3000/detail/${id}`
+  // user profile page url 
+  const userProfileUrl = 'http://localhost:3000/userProfile/'
+  const navigate = useNavigate()
   const [errors, setErrors] = useState("");
   const [sending, setSending] = useState(false);
   const formik = useFormik({
@@ -28,7 +39,16 @@ const SignIn = () => {
         const result = await axios.post("https://reqres.in/api/login", values);
         setSending(false);
         localStorage.setItem("token", result.data.token);
-        window.location = "/";
+        if(redirectURL === userProfileUrl){
+          navigate('/userProfile/')
+        }else if(redirectURL === addPageUrl){
+          navigate('/add/')
+        }else if(redirectURL === carDetailUrl){
+          navigate(`/detail/${id}/`)
+        }else{
+          navigate('/')
+        }
+        
       } catch (error) {
         setErrors("Email or password is not correct!");
         setSending(false);
