@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     element: <CarDetail />,
   },
   {
-    path: "/userProfile/:id",
+    path: "/userProfile/",
     element: <UserProfile />,
   },
   {

@@ -6,6 +6,8 @@ import { Stack } from "@mui/system";
 import AddCarButton from "./Components/AddCarButton";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
+import { useQuery } from "react-query";
+import { getAllCars } from "./Api";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -15,10 +17,22 @@ function App() {
     },
   });
 
+  localStorage.setItem('redirectURL',window.location.href)
+  const { isLoading, isError, error, data, isSuccess } = useQuery(
+    "car",
+    getAllCars
+  );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  } else if (isError) {
+    return <div>Error! {error.message}</div>;
+  } else if (isSuccess)
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Box bgcolor={"background.default"} color={"text.primary"}>
-        <NavBar />
+        <NavBar data={data} />
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Paper
             mt={6}
@@ -37,7 +51,7 @@ function App() {
             sx={{ width: { lg: "76%", md: "72%", sm: "72%", xs: "90%" } }}
           >
             <div id="detail">
-              <Outlet />
+              <Outlet data={data} />
             </div>
           </Grid>
         </Stack>
