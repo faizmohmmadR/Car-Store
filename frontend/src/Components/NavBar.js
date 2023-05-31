@@ -60,8 +60,7 @@ const UserBox = styled(Box)(({ theme }) => ({
 }));
 
 const NavBar = (props) => {
-  console.log(props);
-  let found = "There is no car!";
+  const data = props.data
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const [openSidBar, setOpenSideBar] = useState(false);
@@ -72,16 +71,6 @@ const NavBar = (props) => {
     setOpenSearch(true);
   };
 
-  const { isLoading, isError, error, data, isSuccess } = useQuery(
-    "car",
-    getAllCars
-  );
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  } else if (isError) {
-    return <div>Error! {error.message}</div>;
-  } else if (isSuccess)
     return (
       <AppBar position="fixed">
         <StyleToolBar>
@@ -184,7 +173,7 @@ const NavBar = (props) => {
           }}
         >
           <MenuItem>My account</MenuItem>
-          <Link to="signup" style={{ textDecoration: "none", color: "black" }}>
+          <Link to="signup" style={{ textDecoration: "none", color: "gray" }}>
             <MenuItem>Regester</MenuItem>
           </Link>
           {!token ? (

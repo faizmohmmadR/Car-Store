@@ -4,7 +4,7 @@ import { Grid } from "@mui/material";
 import { useQuery } from "react-query";
 import { getAllCars } from "../Api";
 
-const Feed = () => {
+const Feed = (props) => {
   localStorage.setItem('redirectURL',window.location.href)
   const { isLoading, isError, error, data, isSuccess } = useQuery(
     "car",

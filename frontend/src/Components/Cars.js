@@ -14,7 +14,6 @@ import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import { Box } from "@mui/system";
-import { Link } from "react-router-dom";
 
 const Feed = (props) => {
   const car = props.car;
@@ -29,8 +28,15 @@ const Feed = (props) => {
   return (
     <Grid item sm={6} xs={12} md={6} lg={4}>
       <Card sx={{ height: "96%" }}>
-        <Box>
-          <Link to={`/detail/${car.id}`}  style={{textDecoration: 'none' , color: 'black'}}>
+        <Box
+          onClick={() => {
+            {
+              !token
+                ? (window.location = "/signin/:id")
+                : (window.location = `/detail/${car.id}`);
+            }
+          }}
+        >
           <CardMedia
             className="pic"
             style={{
@@ -59,7 +65,6 @@ const Feed = (props) => {
                 : `${car.description.slice(0, 70)}...`}
             </Typography>
           </CardContent>
-          </Link>
         </Box>
         <CardActions
           disableSpacing
