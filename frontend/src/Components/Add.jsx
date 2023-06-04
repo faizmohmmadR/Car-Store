@@ -39,7 +39,7 @@ const Add = () => {
       queryClient.invalidateQueries("cars");
     },
   });
-
+console.log(add)
   const { isLoading, isError, error, data } = useQuery("address", getAddress);
 
   // use formik and yup for forms validate and handle forms
@@ -57,6 +57,7 @@ const Add = () => {
       address: "",
     },
     onSubmit: (values) => {
+      console.log(values.image)
       try {
         setSending(true);
         let data = new FormData();

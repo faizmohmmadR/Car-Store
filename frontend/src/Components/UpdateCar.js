@@ -9,6 +9,7 @@ import {
   Grid,
   Paper,
 } from "@mui/material";
+import { useEffect } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
@@ -29,6 +30,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Form } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const UpdateCar = () => {
   const token = localStorage.getItem("teken");
@@ -36,65 +38,89 @@ const UpdateCar = () => {
   const quireClient = useQueryClient();
   const { id } = useParams();
 
-  const { data, error, isError, isLoading } = useQuery(["getCar"], () => {
-    return getcar(id);
-  });
 
-  const updateMutation = useMutation(updateCar, {
-    onSuccess: () => {
-      quireClient.invalidateQueries("cars");
-    },
-  });
   // use formik and yup for forms validate and handle forms
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      description: "",
-      price: "",
-      enginType: "",
-      numberPalit: "",
-      carState: "",
-      carSellState: "",
-      image: "",
-      user: "",
-      address: "",
-    },
-    onSubmit: (values) => {
-      console.log(values);
-    },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .min(3, "The car name at last be more than 3 crachters")
-        .max(20, "The car name at must be 20 crachters")
-        .required(" The car name is required"),
-      description: Yup.string()
-        .min(20, "Description at last must be more than 20 charcters")
-        .max(200, "desciption at must can be 200 chrachters")
-        .required(
-          "The car description is required it must be incluede all information abut car"
-        ),
-      price: Yup.number("Price must be integers").required("Price is required"),
-      enginType: Yup.string()
-        .min(50, "It cant be more than 50 charcters")
-        .min(4, "It cant be less than 4 characters")
-        .required("Engin Type is required"),
-      numberPalit: Yup.string()
-        .max(20, "Number palit cant be more than 20 characters")
-        .min(5, "Number palit cant be less than 5 charcters")
-        .required("Number palit is required"),
-      carState: Yup.string().required("Car State is required"),
-      carSellState: Yup.string().required("Car Seelling State is requred"),
-      image: Yup.string().required("Image is requred"),
-      user: Yup.string()
-        .max(20, "User name cant be more than 20 chracters")
-        .min(3, "Use name cant be less than 3 charecters")
-        .required("User is required"),
-      address: Yup.string()
-        .max(30, "Address cant be more than 30 charecters")
-        .min(5, "Address cant be less than 5 charecters")
-        .required("Address is required"),
-    }),
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     name: "",
+  //     description: "",
+  //     price: "",
+  //     enginType: "",
+  //     numberPalit: "",
+  //     carState: "",
+  //     carSellState: "",
+  //     image: "",
+  //     user: "",
+  //     address: "",
+  //   },
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //   },
+  //   validationSchema: Yup.object({
+  //     name: Yup.string()
+  //       .min(3, "The car name at last be more than 3 crachters")
+  //       .max(20, "The car name at must be 20 crachters")
+  //       .required(" The car name is required"),
+  //     description: Yup.string()
+  //       .min(20, "Description at last must be more than 20 charcters")
+  //       .max(200, "desciption at must can be 200 chrachters")
+  //       .required(
+  //         "The car description is required it must be incluede all information abut car"
+  //       ),
+  //     price: Yup.number("Price must be integers").required("Price is required"),
+  //     enginType: Yup.string()
+  //       .min(50, "It cant be more than 50 charcters")
+  //       .min(4, "It cant be less than 4 characters")
+  //       .required("Engin Type is required"),
+  //     numberPalit: Yup.string()
+  //       .max(20, "Number palit cant be more than 20 characters")
+  //       .min(5, "Number palit cant be less than 5 charcters")
+  //       .required("Number palit is required"),
+  //     carState: Yup.string().required("Car State is required"),
+  //     carSellState: Yup.string().required("Car Seelling State is requred"),
+  //     image: Yup.string().required("Image is requred"),
+  //     user: Yup.string()
+  //       .max(20, "User name cant be more than 20 chracters")
+  //       .min(3, "Use name cant be less than 3 charecters")
+  //       .required("User is required"),
+  //     address: Yup.string()
+  //       .max(30, "Address cant be more than 30 charecters")
+  //       .min(5, "Address cant be less than 5 charecters")
+  //       .required("Address is required"),
+  //   }),
+  // });
+
+
+  const [name,setName] = useState('')
+  const [description,setDecription] = useState('')
+  const [price,setPrice] = useState('')
+  const [enginType,setEnginType] = useState('')
+  const [numberPalit,setNumberPalit] = useState('')
+  const [carState,setCarState] = useState('')
+  const [carSellState,setCarSellStat] = useState('')
+  const [image, setImage] = useState('')
+  const [user, setUser] = useState('')
+  const [address,setAddress] = useState('')
+
+  const loadData = async() =>{
+    const {data} = await axios.get(`http://localhost:8000/api/car/${id}/`);
+    console.log(data)
+    setName(data.name)
+    setDecription(data.description)
+    setPrice(data.price)
+    setEnginType(data.enginType)
+    setNumberPalit(data.numberPalit)
+    setCarState(data.carState)
+    setCarSellStat(data.carSellState)
+    setUser(data.user)
+    setAddress(data.address)
+    
+
+  }
+
+  useEffect(() => {
+  loadData()
+  }, [])
 
   // define and set useState for visible and un visible icons on the text fields
   const [nameIcon, setNameIcon] = useState(true);
@@ -104,14 +130,35 @@ const UpdateCar = () => {
   const [numberPalitIcon, setNumberPalitIcon] = useState(true);
   const [userIcon, setUserIcon] = useState(true);
   const [addressIcon, setAddressIcon] = useState(true);
+  const handleSubmit = (e) =>{
+    e.preventDefualt()
+  } 
+  const handleUpdate = async () =>{
+    let formData = new FormData()
+    if(image !== null){
+      formData.append("image",image)
+    }
+    formData.append("name",name)
+    formData.append("description",description)
+    formData.append("price",price)
+    formData.append("enginType",enginType)
+    formData.append("numberPalit",numberPalit)
+    formData.append("carState",carState)
+    formData.append("carSellState",carSellState)
+    formData.append("user",user)
+    formData.append("address",address)
 
-  if (isLoading) {
-    return <Typography>is Loading</Typography>;
-  } else if (isError) {
-    return <Typography>{error.message}</Typography>;
-  } else {
+    await axios({
+      method: 'PUT',
+      url: `http://localhost:8000/api/car/${id}/`,
+      data: formData,
+    }).then(response=>{console.log(response.data)
+      window.location = '/'
+    
+    })
+  }
     return (
-      <Grid Container width={"65%"} margin={"0px auto"}>
+      <Grid container width={"65%"} margin={"0px auto"}>
         <Paper>
           <Box sx={{ margin: "0px auto", width: "80%" }} textAlign="center">
             <Typography
@@ -124,11 +171,10 @@ const UpdateCar = () => {
               Update Car
             </Typography>
             <form
-              onSubmit={formik.handleSubmit}
+              onSubmit={handleSubmit}
               autoComplete="off"
               method="post"
-              enctype="multipart/form-data"
-              onChange={formik.handleChange}
+              encType="multipart/form-data"
             >
               <TextField
                 sx={{ mt: 1.5 }}
@@ -137,9 +183,8 @@ const UpdateCar = () => {
                 size="small"
                 type="text"
                 name="name"
-                // formik for handle forms
-                {...formik.getFieldProps("name")}
-                value={data.name}
+                value={name}
+                onChange={(e)=>{setName(e.target.value)}}
                 onFocus={() => {
                   setNameIcon(false);
                 }}
@@ -160,40 +205,26 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.name &&
-                (formik.errors.name ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.name}{" "}
-                  </Typography>
-                ) : null)}
+              <Box component="img" src={image}></Box>
               <TextField
                 fullWidth
                 size="small"
                 style={{ marginTop: 5 }}
                 type="file"
-                // formik for handle forms
-                {...formik.getFieldProps("image")}
-                value={data.file}
+                onChange={(e)=>{setImage(e.target.files[0])}}
               />
-              {formik.touched.image &&
-                (formik.errors.image ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.image}{" "}
-                  </Typography>
-                ) : null)}
+
               <TextField
                 multiline
-                rows={1}
+                rows={3}
                 sx={{ mt: 1.5 }}
                 fullWidth
                 label="Discription"
                 size="small"
                 type="text"
                 // formik for handle forms
-                {...formik.getFieldProps("description")}
-                value={data.description}
+                value={description}
+                onChange={(e)=>{setDecription(e.target.value)}}
                 onFocus={() => {
                   setDescriptionIcon(false);
                 }}
@@ -214,13 +245,6 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.description &&
-                (formik.errors.description ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.description}{" "}
-                  </Typography>
-                ) : null)}
               <TextField
                 sx={{ mt: 1.5 }}
                 fullWidth
@@ -228,8 +252,8 @@ const UpdateCar = () => {
                 size="small"
                 type="number"
                 // formik for handle forms
-                {...formik.getFieldProps("price")}
-                value={data.price}
+                value={price}
+                onChange={(e)=>{setPrice(e.target.value)}}
                 onFocus={() => {
                   setPriceIcon(false);
                 }}
@@ -250,13 +274,6 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.price &&
-                (formik.errors.price ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.price}{" "}
-                  </Typography>
-                ) : null)}
 
               <TextField
                 sx={{ mt: 1.5 }}
@@ -265,8 +282,8 @@ const UpdateCar = () => {
                 size="small"
                 type="text"
                 // formik for handle forms
-                {...formik.getFieldProps("enginType")}
-                value={data.enginType}
+                value={enginType}
+                onChange={(e)=>{setEnginType(e.target.value)}}
                 onFocus={() => {
                   setEnginTypeIcon(false);
                 }}
@@ -287,13 +304,7 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.enginType &&
-                (formik.errors.enginType ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.enginType}{" "}
-                  </Typography>
-                ) : null)}
+
               <TextField
                 sx={{ mt: 1.5 }}
                 fullWidth
@@ -301,8 +312,8 @@ const UpdateCar = () => {
                 size="small"
                 type="text"
                 // formik for handle forms
-                {...formik.getFieldProps("numberPalit")}
-                value={data.numberPalit}
+                value={numberPalit}
+                onChange={(e)=>{setNumberPalit(e.target.value)}}
                 onFocus={() => {
                   setNumberPalitIcon(false);
                 }}
@@ -323,20 +334,12 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.numberPalit &&
-                (formik.errors.numberPalit ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.numberPalit}{" "}
-                  </Typography>
-                ) : null)}
-
               <FormControl sx={{ mt: 1.5 }} fullWidth size="small">
                 <InputLabel>Car State</InputLabel>
                 <Select
                   label="carState"
-                  {...formik.getFieldProps("carState")}
-                  value={data.carState}
+                  value={carState}
+                  onChange={(e)=>{setCarState(e.target.value)}}
                 >
                   <MenuItem>
                     <em>None</em>
@@ -345,20 +348,13 @@ const UpdateCar = () => {
                   <MenuItem value="New">New</MenuItem>
                 </Select>
               </FormControl>
-              {formik.touched.carState &&
-                (formik.errors.carState ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.carState}{" "}
-                  </Typography>
-                ) : null)}
 
               <FormControl sx={{ mt: 1.5 }} fullWidth size="small">
                 <InputLabel>Seeling state</InputLabel>
                 <Select
-                  label="carState"
-                  {...formik.getFieldProps("carSellState")}
-                  value={data.carSellState}
+                  label="SellingState"
+                  value={carSellState}
+                  onChange={(e)=>{setCarSellStat(e.target.value)}}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -367,13 +363,6 @@ const UpdateCar = () => {
                   <MenuItem value="seeling">Seleing</MenuItem>
                 </Select>
               </FormControl>
-              {formik.touched.carSellState &&
-                (formik.errors.carSellState ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.carSellState}{" "}
-                  </Typography>
-                ) : null)}
 
               <TextField
                 sx={{ mt: 1.5 }}
@@ -382,8 +371,8 @@ const UpdateCar = () => {
                 size="small"
                 type="number"
                 // formik for handle forms
-                {...formik.getFieldProps("user")}
-                value={data.user}
+                value={user}
+                onChange={(e)=>{setUser(e.target.value)}}
                 onFocus={() => {
                   setUserIcon(false);
                 }}
@@ -404,13 +393,7 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.user &&
-                (formik.errors.user ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.user}{" "}
-                  </Typography>
-                ) : null)}
+
               <TextField
                 sx={{ mt: 1.5 }}
                 fullWidth
@@ -418,8 +401,8 @@ const UpdateCar = () => {
                 size="small"
                 type="number"
                 // formik for handle forms
-                {...formik.getFieldProps("address")}
-                value={data.address}
+                value={address}
+                onChange={(e)=>{setAddress(e.target.value)}}
                 onFocus={() => {
                   setAddressIcon(false);
                 }}
@@ -440,13 +423,7 @@ const UpdateCar = () => {
                   ),
                 }}
               />
-              {formik.touched.address &&
-                (formik.errors.address ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.address}{" "}
-                  </Typography>
-                ) : null)}
+
               <Box
                 sx={{
                   mt: 1.5,
@@ -463,7 +440,7 @@ const UpdateCar = () => {
                   sx={{ mr: 1 }}
                   startIcon={<RestartAltIcon />}
                   type="reset"
-                  onReset={formik.handleReset}
+                  
                 >
                   Reset
                 </Button>
@@ -474,7 +451,7 @@ const UpdateCar = () => {
                   variant="contained"
                   endIcon={<SendIcon />}
                   type="submit"
-                  onSubmit={formik.handleSubmit}
+                  onClick={handleUpdate}
                 >
                   Submet
                 </Button>
@@ -485,5 +462,4 @@ const UpdateCar = () => {
       </Grid>
     );
   }
-};
 export default UpdateCar;
