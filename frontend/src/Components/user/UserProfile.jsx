@@ -22,6 +22,13 @@ import { Link } from "react-router-dom";
 const UserProfile = () => {
   localStorage.setItem('redirectURL',window.location.href)
   const token = localStorage.getItem("token");
+
+  const handleDelete = () =>{
+    let del =window.confirm('Are you sure!')
+    return del
+  }
+
+
   const queryClient = useQueryClient();
   const { isLoading, isError, error, data } = useQuery("car", getAllCars);
   const delet = useMutation(deleteCar, {
@@ -133,8 +140,9 @@ const UserProfile = () => {
                           <TableCell>
                             <Button>
                               <DeleteIcon
-                                onClick={() => {
-                                  delet.mutate({ id: car.id });
+                                onClick={() => {<>
+                                  {handleDelete() ? delet.mutate({ id: car.id }) : null}
+                                  </>
                                 }}
                                 sx={{
                                   color: "red",

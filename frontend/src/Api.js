@@ -13,7 +13,7 @@ export const getAllCars = async () => {
 };
 
 export const getcar = async (id) => {
-  const { data } = await Api.get(`/car/${id}`, id);
+  const { data } = await Api.get(`/car/${id}/`, id);
   return data;
 };
 
@@ -22,7 +22,7 @@ export const addCar = async (car) => {
 };
 
 export const updateCar = async (car) => {
-  return await Api.patch(`/car/${car.id}`, car);
+  return await Api.patch(`/car/${car.id}/`, car);
 };
 
 export const deleteCar = async ({ id }) => {
@@ -35,7 +35,7 @@ export const getUsers = async () => {
 };
 
 export const addUser = async (user) => {
-  return await Api.post("/user/", user);
+  return await Api.post("/auth/register/", user);
 };
 export const getAddress = async () => {
   const { data } = await Api.get("/address/");

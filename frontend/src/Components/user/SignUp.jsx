@@ -39,7 +39,7 @@ const SignUp = () => {
       queryClient.invalidateQueries("user");
     },
   });
-
+console.log(add)
   // validation using formik and yup
   const formik = useFormik({
     initialValues: {
