@@ -21,6 +21,6 @@ urlpatterns = [
     path("carDelete/<pk>",carDelete),
     path("cars",cars),
     path("car/<pk>",car),
-    path("carPost",carPost),
+    path("carPost/",carPost),
     path("carUpdate/<pk>",carUpdate)
 ]
