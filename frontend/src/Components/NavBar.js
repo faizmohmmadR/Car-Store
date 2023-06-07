@@ -72,7 +72,7 @@ const NavBar = (props) => {
   };
 
     return (
-      <AppBar position="fixed">
+      <AppBar position="sticky">
         <StyleToolBar>
           <Typography
             variant="h5"
@@ -172,16 +172,16 @@ const NavBar = (props) => {
             horizontal: "right",
           }}
         >
-          <MenuItem>My account</MenuItem>
-          <Link to="signup" style={{ textDecoration: "none", color: "gray" }}>
+          <MenuItem sx={{color: 'black'}}>My account</MenuItem>
+          <Link to="signup" style={{ textDecoration: "none",color: 'black' }}>
             <MenuItem>Regester</MenuItem>
           </Link>
           {!token ? (
-            <Link to="/signin/:id/" style={{ textDecoration: "none" }}>
+            <Link to="/signin/:id/" style={{ textDecoration: "none",color: 'black' }}>
               <MenuItem>Login</MenuItem>
             </Link>
           ) : (
-            <Link to="/logout/" style={{ textDecoration: "none" }}>
+            <Link to="/logout/" style={{ textDecoration: "none",color: 'black'}}>
               <MenuItem>Logout</MenuItem>
             </Link>
           )}

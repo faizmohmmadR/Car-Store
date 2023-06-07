@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Cars.css";
 import {
   Card,
   CardActions,
@@ -17,17 +16,23 @@ import { Box } from "@mui/system";
 
 const Feed = (props) => {
   const car = props.car;
-  const [isFlipped, setIsFlipped] = useState(false);
+  // const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleFlip = (id) => {
-    setIsFlipped(!isFlipped);
-  };
+  // const handleFlip = (id) => {
+  //   setIsFlipped(!isFlipped);
+  // };
 
   const token = localStorage.getItem("token");
   console.log(token);
   return (
     <Grid item sm={6} xs={12} md={6} lg={4}>
-      <Card sx={{ height: "96%" }}>
+      <Card
+        sx={{
+          height: "96%",
+          ":hover": { transform: "scale(0.9,0.9)" },
+          transition: "transform 1.5s",
+        }}
+      >
         <Box
           onClick={() => {
             {
@@ -39,21 +44,23 @@ const Feed = (props) => {
         >
           <CardMedia
             className="pic"
-            style={{
-              transformStyle: "preserve-3d",
-              transform: `rotateY(${isFlipped ? 180 : 0}deg)`,
-              transition: "transform 3s",
-            }}
+            // style={{
+            //   transformStyle: "preserve-3d",
+            //   transform: `rotateY(${isFlipped ? 180 : 0}deg)`?,
+            //   transition: "transform 3s",
+            // }}
             component="img"
             height="194px"
             width="100vw"
-            sx={{ width: "100%" }}
+            sx={{
+              width: "100%",
+            }}
             alt={car.name}
             src={car.image}
-            onMouseOver={handleFlip}
-            onMouseLeave={() => {
-              setIsFlipped(false);
-            }}
+            // onMouseOver={handleFlip}
+            // onMouseLeave={() => {
+            //   setIsFlipped(false);
+            // }}
           />
           <CardContent sx={{ height: 70 }}>
             <Typography variant="h5">

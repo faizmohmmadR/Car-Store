@@ -8,6 +8,7 @@ import {
   Typography,
   Grid,
   Paper,
+  FormGroup,
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -26,11 +27,13 @@ import { addCar, getAddress } from "../Api";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 const Add = () => {
+  const [image, setImage] = useState("");
   // const token = localStorage.getItem('teken')
   // use quireClient form caching data
-  localStorage.setItem('redirectURL',window.location.href)
+  localStorage.setItem("redirectURL", window.location.href);
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState("");
   const queryClient = useQueryClient();
@@ -39,7 +42,7 @@ const Add = () => {
       queryClient.invalidateQueries("cars");
     },
   });
-console.log(add)
+  console.log(add);
   const { isLoading, isError, error, data } = useQuery("address", getAddress);
 
   // use formik and yup for forms validate and handle forms
@@ -52,17 +55,16 @@ console.log(add)
       numberPalit: "",
       carState: "",
       carSellState: "",
-      image: "",
       user: "",
       address: "",
     },
-    onSubmit: (values) => {
-      console.log(values.image)
+    onSubmit: async (values) => {
+      console.log(values.image);
       try {
         setSending(true);
         let data = new FormData();
-        for (let i = 0; i < values.image.length; i++) {
-          data.append("image", values.image[i], values.image[i].name);
+        if (image !== null) {
+          data.append("image", image);
         }
         data.append("name", values.name);
         data.append("description", values.description);
@@ -73,7 +75,13 @@ console.log(add)
         data.append("carSellState", values.carSellState);
         data.append("user", values.user);
         data.append("address", values.address);
-        const res = add.mutate(data);
+        await axios({
+          method: "POST",
+          url: "http://localhost:8000/api/car/",
+          data: data,
+        }).then((res) => {
+          console.log(res.data);
+        });
         setSending(false);
       } catch (error) {
         setErrors(error);
@@ -102,7 +110,6 @@ console.log(add)
         .required("Number palit is required"),
       carState: Yup.string().required("Car State is required"),
       carSellState: Yup.string().required("Car Seelling State is requred"),
-      image: Yup.string().required("Image is requred"),
       user: Yup.string()
         .max(20, "User name cant be more than 20 chracters")
         .min(1, "Use name cant be less than 3 charecters")
@@ -147,346 +154,350 @@ console.log(add)
               method="post"
               encType="multipart/form-data"
             >
-              <TextField
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="Car Name"
-                size="small"
-                type="text"
-                // formik for handle forms
-                {...formik.getFieldProps("name")}
-                onFocus={() => {
-                  setNameIcon(false);
-                }}
-                onBlur={() => {
-                  setNameIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {nameIcon ? (
-                        <InputAdornment position="start">
-                          <DriveFileRenameOutlineIcon />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.name &&
-                (formik.errors.name ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.name}{" "}
-                  </Typography>
-                ) : null)}
-              <TextField
-                fullWidth
-                size="small"
-                accept="image/*"
-                name="image"
-                style={{ marginTop: 5 }}
-                type="file"
-                // formik for handle forms
-                onChange={(e) =>
-                  formik.setFieldValue("image", e.currentTarget.files[0])
-                }
-              />
-              {formik.touched.image &&
-                (formik.errors.image ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.image}{" "}
-                  </Typography>
-                ) : null)}
-              <TextField
-                multiline
-                rows={1}
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="Discription"
-                size="small"
-                type="text"
-                // formik for handle forms
-                {...formik.getFieldProps("description")}
-                onFocus={() => {
-                  setDescriptionIcon(false);
-                }}
-                onBlur={() => {
-                  setDescriptionIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {descriptionIcon ? (
-                        <InputAdornment position="start">
-                          <DescriptionIcon />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.description &&
-                (formik.errors.description ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.description}{" "}
-                  </Typography>
-                ) : null)}
-              <TextField
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="price"
-                size="small"
-                type="number"
-                // formik for handle forms
-                {...formik.getFieldProps("price")}
-                onFocus={() => {
-                  setPriceIcon(false);
-                }}
-                onBlur={() => {
-                  setPriceIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {priceIcon ? (
-                        <InputAdornment position="start">
-                          <PriceChangeIcon />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.price &&
-                (formik.errors.price ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.price}{" "}
-                  </Typography>
-                ) : null)}
-
-              <TextField
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="Engin Type"
-                size="small"
-                type="text"
-                // formik for handle forms
-                {...formik.getFieldProps("enginType")}
-                onFocus={() => {
-                  setEnginTypeIcon(false);
-                }}
-                onBlur={() => {
-                  setEnginTypeIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {enginTypeIcon ? (
-                        <InputAdornment position="start">
-                          <DirectionsCarFilledIcon />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.enginType &&
-                (formik.errors.enginType ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.enginType}{" "}
-                  </Typography>
-                ) : null)}
-              <TextField
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="Car Number Palit"
-                size="small"
-                type="text"
-                // formik for handle forms
-                {...formik.getFieldProps("numberPalit")}
-                onFocus={() => {
-                  setNumberPalitIcon(false);
-                }}
-                onBlur={() => {
-                  setNumberPalitIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {numberPalitIcon ? (
-                        <InputAdornment position="start">
-                          <PinIcon />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.numberPalit &&
-                (formik.errors.numberPalit ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.numberPalit}{" "}
-                  </Typography>
-                ) : null)}
-
-              <FormControl sx={{ mt: 1.5 }} fullWidth size="small">
-                <InputLabel>Car State</InputLabel>
-                <Select label="carState" {...formik.getFieldProps("carState")}>
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Used">Used</MenuItem>
-                  <MenuItem value="New">New</MenuItem>
-                </Select>
-              </FormControl>
-              {formik.touched.carState &&
-                (formik.errors.carState ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.carState}{" "}
-                  </Typography>
-                ) : null)}
-
-              <FormControl sx={{ mt: 1.5 }} fullWidth size="small">
-                <InputLabel>Seeling state</InputLabel>
-                <Select
-                  label="carState"
-                  {...formik.getFieldProps("carSellState")}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Sold">Sold</MenuItem>
-                  <MenuItem value="seeling">Seleing</MenuItem>
-                </Select>
-              </FormControl>
-              {formik.touched.carSellState &&
-                (formik.errors.carSellState ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.carSellState}{" "}
-                  </Typography>
-                ) : null)}
-
-              <TextField
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="user"
-                size="small"
-                type="number"
-                // formik for handle forms
-                {...formik.getFieldProps("user")}
-                onFocus={() => {
-                  setUserIcon(false);
-                }}
-                onBlur={() => {
-                  setUserIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {userIcon ? (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.user &&
-                (formik.errors.user ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.user}{" "}
-                  </Typography>
-                ) : null)}
-              <TextField
-                sx={{ mt: 1.5 }}
-                fullWidth
-                label="address"
-                size="small"
-                type="number"
-                // formik for handle forms
-                {...formik.getFieldProps("address")}
-                onFocus={() => {
-                  setAddressIcon(false);
-                }}
-                onBlur={() => {
-                  setAddressIcon(true);
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {addressIcon ? (
-                        <InputAdornment position="start">
-                          <PlaceIcon />
-                        </InputAdornment>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ),
-                }}
-              />
-              {formik.touched.address &&
-                (formik.errors.address ? (
-                  <Typography color={"red"} fontSize={"12px"}>
-                    {" "}
-                    {formik.errors.address}{" "}
-                  </Typography>
-                ) : null)}
-              <Box
-                sx={{
-                  mt: 1.5,
-                  mb: 3,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "end",
-                }}
-                paddingBottom={5}
-              >
-                <Button
+              <FormGroup>
+                <TextField
+                  sx={{ mt: 1.5 }}
                   fullWidth
-                  variant="outlined"
-                  sx={{ mr: 1 }}
-                  startIcon={<RestartAltIcon />}
-                  type="reset"
-                  onReset={formik.handleReset}
-                >
-                  Reset
-                </Button>
-
-                <Button />
-                <Button
+                  label="Car Name"
+                  size="small"
+                  type="text"
+                  onFocus={() => {
+                    setNameIcon(false);
+                  }}
+                  onBlur={() => {
+                    setNameIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {nameIcon ? (
+                          <InputAdornment position="start">
+                            <DriveFileRenameOutlineIcon />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  // formik for handle forms
+                  {...formik.getFieldProps("name")}
+                />
+                {formik.touched.name &&
+                  (formik.errors.name ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.name}{" "}
+                    </Typography>
+                  ) : null)}
+                <TextField
                   fullWidth
-                  variant="contained"
-                  endIcon={<SendIcon />}
-                  type="submit"
-                  onSubmit={formik.handleSubmit}
-                  disabled={sending}
+                  size="small"
+                  accept="image/*"
+                  name="image"
+                  style={{ marginTop: 5 }}
+                  type="file"
+                  // formik for handle forms
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+                {formik.touched.image &&
+                  (formik.errors.image ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.image}{" "}
+                    </Typography>
+                  ) : null)}
+                <TextField
+                  multiline
+                  rows={1}
+                  sx={{ mt: 1.5 }}
+                  fullWidth
+                  label="Discription"
+                  size="small"
+                  type="text"
+                  onFocus={() => {
+                    setDescriptionIcon(false);
+                  }}
+                  onBlur={() => {
+                    setDescriptionIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {descriptionIcon ? (
+                          <InputAdornment position="start">
+                            <DescriptionIcon />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  // formik for handle forms
+                  {...formik.getFieldProps("description")}
+                />
+                {formik.touched.description &&
+                  (formik.errors.description ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.description}{" "}
+                    </Typography>
+                  ) : null)}
+                <TextField
+                  sx={{ mt: 1.5 }}
+                  fullWidth
+                  label="price"
+                  size="small"
+                  type="number"
+                  onFocus={() => {
+                    setPriceIcon(false);
+                  }}
+                  onBlur={() => {
+                    setPriceIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {priceIcon ? (
+                          <InputAdornment position="start">
+                            <PriceChangeIcon />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  // formik for handle forms
+                  {...formik.getFieldProps("price")}
+                />
+                {formik.touched.price &&
+                  (formik.errors.price ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.price}{" "}
+                    </Typography>
+                  ) : null)}
+
+                <TextField
+                  sx={{ mt: 1.5 }}
+                  fullWidth
+                  label="Engin Type"
+                  size="small"
+                  type="text"
+                  // formik for handle forms
+                  onFocus={() => {
+                    setEnginTypeIcon(false);
+                  }}
+                  onBlur={() => {
+                    setEnginTypeIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {enginTypeIcon ? (
+                          <InputAdornment position="start">
+                            <DirectionsCarFilledIcon />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  {...formik.getFieldProps("enginType")}
+                />
+                {formik.touched.enginType &&
+                  (formik.errors.enginType ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.enginType}{" "}
+                    </Typography>
+                  ) : null)}
+                <TextField
+                  sx={{ mt: 1.5 }}
+                  fullWidth
+                  label="Car Number Palit"
+                  size="small"
+                  type="text"
+                  // formik for handle forms
+                  onFocus={() => {
+                    setNumberPalitIcon(false);
+                  }}
+                  onBlur={() => {
+                    setNumberPalitIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {numberPalitIcon ? (
+                          <InputAdornment position="start">
+                            <PinIcon />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  {...formik.getFieldProps("numberPalit")}
+                />
+
+                {formik.touched.numberPalit &&
+                  (formik.errors.numberPalit ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.numberPalit}{" "}
+                    </Typography>
+                  ) : null)}
+
+                <FormControl sx={{ mt: 1.5 }} fullWidth size="small">
+                  <InputLabel>Car State</InputLabel>
+                  <Select
+                    label="carState"
+                    {...formik.getFieldProps("carState")}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="Used">Used</MenuItem>
+                    <MenuItem value="New">New</MenuItem>
+                  </Select>
+                </FormControl>
+                {formik.touched.carState &&
+                  (formik.errors.carState ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.carState}{" "}
+                    </Typography>
+                  ) : null)}
+
+                <FormControl sx={{ mt: 1.5 }} fullWidth size="small">
+                  <InputLabel>Seeling state</InputLabel>
+                  <Select
+                    label="carState"
+                    {...formik.getFieldProps("carSellState")}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="Sold">Sold</MenuItem>
+                    <MenuItem value="seeling">Seleing</MenuItem>
+                  </Select>
+                </FormControl>
+                {formik.touched.carSellState &&
+                  (formik.errors.carSellState ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.carSellState}{" "}
+                    </Typography>
+                  ) : null)}
+
+                <TextField
+                  sx={{ mt: 1.5 }}
+                  fullWidth
+                  label="user"
+                  size="small"
+                  type="number"
+                  onFocus={() => {
+                    setUserIcon(false);
+                  }}
+                  onBlur={() => {
+                    setUserIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {userIcon ? (
+                          <InputAdornment position="start">
+                            <AccountCircle />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  // formik for handle forms
+                  {...formik.getFieldProps("user")}
+                />
+                {formik.touched.user &&
+                  (formik.errors.user ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.user}{" "}
+                    </Typography>
+                  ) : null)}
+                <TextField
+                  sx={{ mt: 1.5 }}
+                  fullWidth
+                  label="address"
+                  size="small"
+                  type="number"
+                  onFocus={() => {
+                    setAddressIcon(false);
+                  }}
+                  onBlur={() => {
+                    setAddressIcon(true);
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        {addressIcon ? (
+                          <InputAdornment position="start">
+                            <PlaceIcon />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ),
+                  }}
+                  // formik for handle forms
+                  {...formik.getFieldProps("address")}
+                />
+                {formik.touched.address &&
+                  (formik.errors.address ? (
+                    <Typography color={"red"} fontSize={"12px"}>
+                      {" "}
+                      {formik.errors.address}{" "}
+                    </Typography>
+                  ) : null)}
+                <Box
+                  sx={{
+                    mt: 1.5,
+                    mb: 3,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "end",
+                  }}
+                  paddingBottom={5}
                 >
-                  Submet
-                </Button>
-              </Box>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    sx={{ mr: 1 }}
+                    startIcon={<RestartAltIcon />}
+                    type="reset"
+                    onReset={formik.handleReset}
+                  >
+                    Reset
+                  </Button>
+
+                  <Button />
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    endIcon={<SendIcon />}
+                    type="submit"
+                    onSubmit={formik.handleSubmit}
+                    disabled={sending}
+                  >
+                    Submet
+                  </Button>
+                </Box>
+              </FormGroup>
             </form>
           </Box>
         </Paper>

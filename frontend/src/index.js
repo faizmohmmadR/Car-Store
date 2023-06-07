@@ -14,6 +14,7 @@ import Users from "./Components/Delete";
 import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/UpdateCar";
+import Home from "./Components/layout/Home";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,11 @@ const router = createBrowserRouter([
     path: "/update/:id/",
     element: <UpdateCar />,
   },
+  {
+    path: "/home/",
+    element: <Home/>,
+  }
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
