@@ -45,7 +45,6 @@ const CarDetail = () => {
               component="img"
               // src={`${process.env.PUBLIC_URL}/assets/images/pic1.jpg`}
               src={data.image}
-              alt={data.image.name}
             />
           </Card>
           <Grid
