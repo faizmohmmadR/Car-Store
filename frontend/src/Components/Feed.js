@@ -17,7 +17,7 @@ const Feed = (props) => {
     return <div>Error! {error.message}</div>;
   } else if (isSuccess)
     return (
-      <Grid flex={7} container spacing={2} pt={8} pr={1}>
+      <Grid flex={7} container spacing={2} pt={1}>
         {data.map((car, i) => {
           return <Cars key={car.id} car={car} />;
         })}

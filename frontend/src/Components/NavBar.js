@@ -72,7 +72,7 @@ const NavBar = (props) => {
   };
 
     return (
-      <AppBar position="fixed">
+      <AppBar position="sticky">
         <StyleToolBar>
           <Typography
             variant="h5"
