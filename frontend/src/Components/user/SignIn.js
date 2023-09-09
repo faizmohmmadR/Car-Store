@@ -16,6 +16,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 const SignIn = () => {
+  console.log("local")
+  console.log(localStorage.getItem('token'))
   const id = useParams()
   //get redurec url 
   const redirectURL = localStorage.getItem('redirectURL')
@@ -36,7 +38,7 @@ const SignIn = () => {
     onSubmit: async (values) => {
       try {
         setSending(true);
-        const result = await axios.post("https://reqres.in/api/login", values);
+        const result = await axios.post("https://reqres.in/api/login/", values);
         setSending(false);
         localStorage.setItem("token", result.data.token);
         if(redirectURL === userProfileUrl){
@@ -50,14 +52,13 @@ const SignIn = () => {
         }
         
       } catch (error) {
-        setErrors("Email or password is not correct!");
+        setErrors("username or password is not correct!");
         setSending(false);
       }
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email("Not correct email format")
-        .required("Email is required"),
+        .required("username is required"),
       password: Yup.string()
         .max(16, "password cant be more than 16 chracters")
         .min(6, "password cant be less than 6 characters")
@@ -70,7 +71,7 @@ const SignIn = () => {
   const [passwordIcon, setPasswordIcon] = useState(true);
 
   return (
-    <Grid container lg={12} md={12} sm={12} xs={12} fullWidth>
+    <Grid item lg={12} md={12} sm={12} xs={12} fullWidth>
       <Box
         bgcolor={"background.default"}
         color={"text.primary"}
@@ -100,8 +101,8 @@ const SignIn = () => {
             <TextField
               sx={{ mt: 2, width: 600 }}
               size="small"
-              label="Email"
-              type="email"
+              label="username"
+              type="text"
               {...formik.getFieldProps("email")}
               onFocus={() => {
                 setEmailIcon(false);
@@ -113,7 +114,7 @@ const SignIn = () => {
                 startAdornment: (
                   <>
                     {emailIcon ? (
-                      <InputAdornment position="start">
+                      <InputAdornment position='start'>
                         <EmailIcon />
                       </InputAdornment>
                     ) : (
@@ -145,7 +146,7 @@ const SignIn = () => {
                 startAdornment: (
                   <>
                     {passwordIcon ? (
-                      <InputAdornment position="start">
+                      <InputAdornment position='start'>
                         <LockIcon />
                       </InputAdornment>
                     ) : (

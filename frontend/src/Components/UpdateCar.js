@@ -39,56 +39,6 @@ const UpdateCar = () => {
   const { id } = useParams();
 
 
-  // use formik and yup for forms validate and handle forms
-  // const formik = useFormik({
-  //   initialValues: {
-  //     name: "",
-  //     description: "",
-  //     price: "",
-  //     enginType: "",
-  //     numberPalit: "",
-  //     carState: "",
-  //     carSellState: "",
-  //     image: "",
-  //     user: "",
-  //     address: "",
-  //   },
-  //   onSubmit: (values) => {
-  //     console.log(values);
-  //   },
-  //   validationSchema: Yup.object({
-  //     name: Yup.string()
-  //       .min(3, "The car name at last be more than 3 crachters")
-  //       .max(20, "The car name at must be 20 crachters")
-  //       .required(" The car name is required"),
-  //     description: Yup.string()
-  //       .min(20, "Description at last must be more than 20 charcters")
-  //       .max(200, "desciption at must can be 200 chrachters")
-  //       .required(
-  //         "The car description is required it must be incluede all information abut car"
-  //       ),
-  //     price: Yup.number("Price must be integers").required("Price is required"),
-  //     enginType: Yup.string()
-  //       .min(50, "It cant be more than 50 charcters")
-  //       .min(4, "It cant be less than 4 characters")
-  //       .required("Engin Type is required"),
-  //     numberPalit: Yup.string()
-  //       .max(20, "Number palit cant be more than 20 characters")
-  //       .min(5, "Number palit cant be less than 5 charcters")
-  //       .required("Number palit is required"),
-  //     carState: Yup.string().required("Car State is required"),
-  //     carSellState: Yup.string().required("Car Seelling State is requred"),
-  //     image: Yup.string().required("Image is requred"),
-  //     user: Yup.string()
-  //       .max(20, "User name cant be more than 20 chracters")
-  //       .min(3, "Use name cant be less than 3 charecters")
-  //       .required("User is required"),
-  //     address: Yup.string()
-  //       .max(30, "Address cant be more than 30 charecters")
-  //       .min(5, "Address cant be less than 5 charecters")
-  //       .required("Address is required"),
-  //   }),
-  // });
 
 
   const [name,setName] = useState('')
@@ -114,8 +64,6 @@ const UpdateCar = () => {
     setCarSellStat(data.carSellState)
     setUser(data.user)
     setAddress(data.address)
-    
-
   }
 
   useEffect(() => {
