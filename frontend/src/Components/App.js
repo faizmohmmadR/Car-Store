@@ -1,15 +1,13 @@
-import RightBar from "./Components/RightBar";
-import SideBar from "./Components/SideBar";
-import NavBar from "./Components/NavBar";
+import React from "react";
+import SideBar from "./SideBar";
+import NavBar from "./NavBar";
 import { Box, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
 import { Stack } from "@mui/system";
-import AddCarButton from "./Components/AddCarButton";
+import AddCarButton from "./AddCarButton";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { getAllCars } from "./Api";
-import "./App.css";
-import Home from "./Components/layout/Home";
+import { getAllCars } from "../Api";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -35,7 +33,11 @@ function App() {
         <Box bgcolor={"background.default"} color={"text.primary"}>
           <NavBar data={data} />
           <Stack direction="row" spacing={2} justifyContent="space-between">
-            <Grid>
+            <Grid
+              sx={{
+                display: { lg: "block", md: "block", sm: "block", xs: "none" },
+              }}
+            >
               <SideBar setMode={setMode} mode={mode} />
             </Grid>
             <Grid
