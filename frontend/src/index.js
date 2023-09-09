@@ -5,7 +5,6 @@ import Feed from "./Components/Feed";
 import Add from "./Components/Add";
 import SignUp from "./Components/user/SignUp";
 import SignIn from "./Components/user/SignIn";
-import App from "./App";
 import UserProfile from "./Components/user/UserProfile";
 import CarDetail from "./Components/CarDetail";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -14,7 +13,7 @@ import Users from "./Components/Delete";
 import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/UpdateCar";
-import Home from "./Components/layout/Home";
+import App from "./Components/App"
 
 const queryClient = new QueryClient();
 
@@ -65,14 +64,9 @@ const router = createBrowserRouter([
     path: "/update/:id/",
     element: <UpdateCar />,
   },
-  {
-    path: "/home/",
-    element: <Home/>,
-  }
-
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("app")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />

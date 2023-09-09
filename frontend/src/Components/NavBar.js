@@ -243,7 +243,7 @@ const NavBar = (props) => {
               backgroundColor: "white",
             }}
           >
-            <Typography align="end">
+            <Typography align="right">
               <CloseIcon
                 onClick={() => 
                   {
