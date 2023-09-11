@@ -26,7 +26,7 @@ import {
   import { useQueryClient, useMutation } from "react-query";
   import { addUser } from "../../Api";
   import axios from "axios";
-  const Regisrer = () => {
+  const Regisrer1 = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -185,5 +185,5 @@ import {
     );
   };
   
-  export default Regisrer;
+  export default Regisrer1;
   

@@ -35,7 +35,7 @@ class Car(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ad_user")
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="ad_address")
-    image = models.ImageField(upload_to ='uploads/images/carImages',null=False,blank=False,default='')
+    image = models.ImageField(upload_to="frontend/static/images/ad/%Y/%m/%d/",null=False,blank=False,default='')
 
     def __str__(self):
         return self.name

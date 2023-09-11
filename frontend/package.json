@@ -32,7 +32,8 @@
   },
   "scripts": {
     "dev": "webpack --mode development --watch",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "homepage": "https://faizmohmmadR.github.io/Car-Store/"
   },
   "eslintConfig": {
     "extends": [

@@ -14,6 +14,8 @@ import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/UpdateCar";
 import App from "./Components/App"
+import Regisrer1 from "./Components/user/Register1";
+import Login from "./Components/user/Login";
 
 const queryClient = new QueryClient();
 
@@ -52,10 +54,20 @@ const router = createBrowserRouter([
     path: "/del/",
     element: <Users />,
   },
+  // pracitce
   {
     path: "/reg/",
     element: <Regisrer />,
   },
+  {
+    path: "/reg1/",
+    element: <Regisrer1/>,
+  },
+  {
+    path: "/log/",
+    element: <Login/>,
+  },
+  // practice
   {
     path: "/logout/",
     element: <Logout />,
