@@ -1,9 +1,9 @@
 import React from "react";
-import SideBar from "./SideBar";
-import NavBar from "./NavBar";
+import SideBar from "./layout/SideBar";
+import NavBar from "./layout/NavBar";
 import { Box, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
 import { Stack } from "@mui/system";
-import AddCarButton from "./AddCarButton";
+import AddCarButton from "../Components/car/AddCarButton";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "react-query";

@@ -15,8 +15,9 @@ import PagesIcon from "@mui/icons-material/Pages";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const SideBar = ({ mode, setMode }) => {
+  const navigat = useNavigate();
   return (
     <Box position="fixed" component="div">
       <List>
@@ -57,12 +58,12 @@ const SideBar = ({ mode, setMode }) => {
             <ListItemIcon>
               <AccountBoxIcon />
             </ListItemIcon>
-            <Link
-              to="/userProfile/"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItemText primary="Profile" />
-            </Link>
+            <ListItemText
+              onClick={() => {
+                navigat("/userProfile/");
+              }}
+              primary="Profile"
+            />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>

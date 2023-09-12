@@ -14,7 +14,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import { Box } from "@mui/system";
 
-const Feed = (props) => {
+const Cars = (props) => {
   const car = props.car;
   // const [isFlipped, setIsFlipped] = useState(false);
 
@@ -104,4 +104,4 @@ const Feed = (props) => {
   );
 };
 
-export default Feed;
+export default Cars;

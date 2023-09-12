@@ -1,21 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Feed from "./Components/Feed";
-import Add from "./Components/Add";
-import SignUp from "./Components/user/SignUp";
+import Feed from "./Components/layout/Feed";
+import Add from "./Components/car/Add";
 import SignIn from "./Components/user/SignIn";
 import UserProfile from "./Components/user/UserProfile";
-import CarDetail from "./Components/CarDetail";
+import CarDetail from "./Components/car/CarDetail";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import Users from "./Components/Delete";
 import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
-import UpdateCar from "./Components/UpdateCar";
+import UpdateCar from "./Components/car/UpdateCar";
 import App from "./Components/App";
-import Regisrer1 from "./Components/user/Register1";
-import Login from "./Components/user/Login";
+
 
 const queryClient = new QueryClient();
 
@@ -47,27 +44,9 @@ const router = createBrowserRouter([
     element: <Regisrer />,
   },
   {
-    path: "/signin/:id/",
+    path: "/signin/",
     element: <SignIn />,
   }, /////////////////////////////////// testing
-  {
-    path: "/del/",
-    element: <Users />,
-  },
-  // pracitce
-  {
-    path: "/reg/",
-    element: <Regisrer />,
-  },
-  {
-    path: "/reg1/",
-    element: <Regisrer1 />,
-  },
-  {
-    path: "/log/",
-    element: <Login />,
-  },
-  // practice
   {
     path: "/logout/",
     element: <Logout />,

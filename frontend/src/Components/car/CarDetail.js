@@ -15,7 +15,7 @@ import {
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { getcar } from "../Api";
+import { getcar } from "../../Api";
 import { useQuery } from "react-query";
 
 const CarDetail = () => {

@@ -9,6 +9,7 @@ import {
   Grid,
   Paper,
 } from "@mui/material";
+import { useEffect } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
@@ -22,10 +23,11 @@ import Select from "@mui/material/Select";
 import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import {useQueryClient } from "react-query";
+
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const Add = () => {
+const UpdateCar = () => {
   const token = localStorage.getItem("teken");
   // use quireClient form caching data
   const quireClient = useQueryClient();
@@ -44,6 +46,24 @@ const Add = () => {
   const [image, setImage] = useState('')
   const [user, setUser] = useState('')
   const [address,setAddress] = useState('')
+
+  const loadData = async() =>{
+    const {data} = await axios.get(`http://localhost:8000/api/car/${id}/`);
+    console.log(data)
+    setName(data.name)
+    setDecription(data.description)
+    setPrice(data.price)
+    setEnginType(data.enginType)
+    setNumberPalit(data.numberPalit)
+    setCarState(data.carState)
+    setCarSellStat(data.carSellState)
+    setUser(data.user)
+    setAddress(data.address)
+  }
+
+  useEffect(() => {
+  loadData()
+  }, [])
 
   // define and set useState for visible and un visible icons on the text fields
   const [nameIcon, setNameIcon] = useState(true);
@@ -72,8 +92,8 @@ const Add = () => {
     formData.append("address",address)
 
     await axios({
-      method: 'POST',
-      url: `http://localhost:8000/api/car/`,
+      method: 'PUT',
+      url: `http://localhost:8000/api/car/${id}/`,
       data: formData,
     }).then(response=>{console.log(response.data)
       window.location = '/'
@@ -81,7 +101,7 @@ const Add = () => {
     })
   }
     return (
-      <Grid container width={"65%"} margin={"0px auto"} fullWidth>
+      <Grid container width={"65%"} margin={"0px auto"}>
         <Paper>
           <Box sx={{ margin: "0px auto", width: "80%" }} textAlign="center">
             <Typography
@@ -385,4 +405,4 @@ const Add = () => {
       </Grid>
     );
   }
-export default Add;
+export default UpdateCar;

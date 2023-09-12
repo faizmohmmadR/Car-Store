@@ -9,70 +9,64 @@ import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {useNavigate } from "react-router-dom";
-import {Link } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import axios from "axios";
 import { useParams } from "react-router-dom";
 const SignIn = () => {
-  console.log("local")
-  console.log(localStorage.getItem('token'))
-  const id = useParams()
-  //get redurec url 
-  const redirectURL = localStorage.getItem('redirectURL')
-  // add page url 
-  const addPageUrl = 'http://localhost:3000/Add'
-  // carDetail page url 
-  const carDetailUrl = `http://localhost:3000/detail/${id}`
-  // user profile page url 
-  const userProfileUrl = 'http://localhost:3000/userProfile/'
-  const navigate = useNavigate()
+  const id = useParams();
+  //get redurec url
+  const redirectURL = localStorage.getItem("redirectURL");
+  // add page url
+  const addPageUrl = "http://localhost:3000/Add";
+  // carDetail page url
+  const carDetailUrl = `http://localhost:3000/detail/${id}`;
+  // user profile page url
+  const userProfileUrl = "http://localhost:3000/userProfile/";
+  const navigate = useNavigate();
   const [errors, setErrors] = useState("");
   const [sending, setSending] = useState(false);
-  const formik = useFormik({
-    initialValues: {
-     username: "",
-      password: "",
-    },
-    onSubmit: async (values) => {
-      try {
-        setSending(true);
-        const result = await axios.post("http://localhost:8000/api/login", values);
-        console.log(values)
-        setSending(false);
-        localStorage.setItem("token", result.data.token);
-        if(redirectURL === userProfileUrl){
-          navigate('/userProfile/')
-        }else if(redirectURL === addPageUrl){
-          navigate('/add/')
-        }else if(redirectURL === carDetailUrl){
-          navigate(`/detail/${id}/`)
-        }else{
-          navigate('/')
-        }
-        
-      } catch (error) {
-        setErrors("username or password is not correct!");
-        setSending(false);
-      }
-    },
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .required("username is required"),
-      password: Yup.string()
-        .max(16, "password cant be more than 16 chracters")
-        .min(6, "password cant be less than 6 characters")
-        .required("Password is required"),
-    }),
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   // define state for visible and unVisible icons in the text box
   const [emailIcon, setEmailIcon] = useState(true);
   const [passwordIcon, setPasswordIcon] = useState(true);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("username", username);
+    formData.append("password", password);
+
+    try {
+      setSending(true);
+      const result = await axios.post(
+        "http://localhost:8000/api/login",
+        formData
+      );
+      setSending(false);
+      localStorage.setItem("token", result.data.token);
+      if (redirectURL === userProfileUrl) {
+        navigate("/userProfile/");
+      } else if (redirectURL === addPageUrl) {
+        navigate("/add/");
+      } else if (redirectURL === carDetailUrl) {
+        navigate(`/detail/${id}/`);
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      setErrors("username or password is not correct!");
+      setSending(false);
+    }
+  };
+
   return (
-    <Grid item lg={12} md={12} sm={12} xs={12} fullWidth>
+    <Grid item lg={12} md={12} sm={12} xs={12}>
       <Box
         bgcolor={"background.default"}
         color={"text.primary"}
@@ -98,13 +92,16 @@ const SignIn = () => {
           {errors}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <form autoComplete="off" onSubmit={formik.handleSubmit}>
+          <form autoComplete="off" onSubmit={handleSubmit}>
             <TextField
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="username"
               type="text"
-              {...formik.getFieldProps("username")}
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
               onFocus={() => {
                 setEmailIcon(false);
               }}
@@ -115,7 +112,7 @@ const SignIn = () => {
                 startAdornment: (
                   <>
                     {emailIcon ? (
-                      <InputAdornment position='start'>
+                      <InputAdornment position="start">
                         <EmailIcon />
                       </InputAdornment>
                     ) : (
@@ -125,18 +122,15 @@ const SignIn = () => {
                 ),
               }}
             />
-            {formik.touched.email &&
-              (formik.errors.email ? (
-                <Typography color={"red"} fontSize={"12px"}>
-                  {formik.errors.email}
-                </Typography>
-              ) : null)}
             <TextField
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="Password"
               type="password"
-              {...formik.getFieldProps("password")}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
               onFocus={() => {
                 setPasswordIcon(false);
               }}
@@ -147,7 +141,7 @@ const SignIn = () => {
                 startAdornment: (
                   <>
                     {passwordIcon ? (
-                      <InputAdornment position='start'>
+                      <InputAdornment position="start">
                         <LockIcon />
                       </InputAdornment>
                     ) : (
@@ -155,18 +149,8 @@ const SignIn = () => {
                     )}
                   </>
                 ),
-                endAdornment: (
-                  <InputAdornment>
-                    <VisibilityIcon sx={{ ":hover": { cursor: "pointer" } }} />
-                  </InputAdornment>
-                ),
               }}
             />
-            {formik.touched.password && formik.errors.password ? (
-              <Typography color={"red"} fontSize={"12px"}>
-                {formik.errors.password}
-              </Typography>
-            ) : null}
             <Box
               sx={{
                 display: "flex",
