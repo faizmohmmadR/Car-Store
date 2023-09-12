@@ -1,48 +1,26 @@
 # Create your views here.
+from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from knox.models import AuthToken
+from rest_framework import generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
-from django.shortcuts import render
 from .serializers import *
 from .models import *
 
+from rest_framework import serializers
+from .serializers import UserSerializer
 
-from django.contrib import auth
-from rest_framework import generics, permissions, serializers
-from knox.models import AuthToken
-from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
-
-
-class SignUpAPI(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        token = AuthToken.objects.create(user)
-        return Response({
-            "users": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": token[1]
-        })
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 
-class SignInAPI(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-
-    def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
-        })
+User._meta.get_field('email')._unique = True
 
 
-class MainUser(generics.RetrieveAPIView):
+class UserAPIView(generics.RetrieveAPIView):
     permission_classes = [
-        permissions.AllowAny
+        permissions.IsAuthenticated,
     ]
     serializer_class = UserSerializer
 
@@ -50,9 +28,34 @@ class MainUser(generics.RetrieveAPIView):
         return self.request.user
 
 
+class RegisterAPIView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
+
+
+class LoginAPIView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
 # class UserViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
+
 
 @api_view(["GET"])
 def users(request):

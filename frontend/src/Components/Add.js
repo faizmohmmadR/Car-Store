@@ -81,7 +81,7 @@ const Add = () => {
     })
   }
     return (
-      <Grid container width={"65%"} margin={"0px auto"}>
+      <Grid container width={"65%"} margin={"0px auto"} fullWidth>
         <Paper>
           <Box sx={{ margin: "0px auto", width: "80%" }} textAlign="center">
             <Typography

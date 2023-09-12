@@ -63,7 +63,7 @@ const Feed = (props) => {
             // }}
           />
           <CardContent sx={{ height: 70 }}>
-            <Typography variant="h5">
+            <Typography  sx={{fontSize: {lg: '20.28px',md: '19px',sm: '12px',xs: '19px'}}}>
               {car.name.length <= 17 ? car.name : `${car.name.slice(0, 17)}...`}
             </Typography>
             <Typography variant="body2" color="text.secondary">

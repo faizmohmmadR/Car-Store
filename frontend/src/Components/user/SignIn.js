@@ -32,13 +32,14 @@ const SignIn = () => {
   const [sending, setSending] = useState(false);
   const formik = useFormik({
     initialValues: {
-      email: "",
+     username: "",
       password: "",
     },
     onSubmit: async (values) => {
       try {
         setSending(true);
-        const result = await axios.post("https://reqres.in/api/login/", values);
+        const result = await axios.post("http://localhost:8000/api/login", values);
+        console.log(values)
         setSending(false);
         localStorage.setItem("token", result.data.token);
         if(redirectURL === userProfileUrl){
@@ -57,7 +58,7 @@ const SignIn = () => {
       }
     },
     validationSchema: Yup.object({
-      email: Yup.string()
+      username: Yup.string()
         .required("username is required"),
       password: Yup.string()
         .max(16, "password cant be more than 16 chracters")
@@ -103,7 +104,7 @@ const SignIn = () => {
               size="small"
               label="username"
               type="text"
-              {...formik.getFieldProps("email")}
+              {...formik.getFieldProps("username")}
               onFocus={() => {
                 setEmailIcon(false);
               }}

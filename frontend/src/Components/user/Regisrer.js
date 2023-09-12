@@ -1,79 +1,69 @@
-import {
-  Button,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  InputLabel,
-  Grid,
-} from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
-// import icons
+import React, { useState } from "react";
+import { InputAdornment } from "@mui/material";
+// impor icons
 
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
 import LockIcon from "@mui/icons-material/Lock";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import { InputAdornment } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import { Form, Link } from "react-router-dom";
-import { useQueryClient, useMutation } from "react-query";
-import { addUser } from "../../Api";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 const Regisrer = () => {
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState("");
+  const [sending, setSending] = useState(false);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [avatar, setImage] = useState();
-  const [users, setUser] = useState([]);
+  const [password, setPassword] = useState("");
+
+  const id = useParams();
+  //get redurec url
+  const redirectURL = localStorage.getItem("redirectURL");
+  // add page url
+  const addPageUrl = "http://localhost:3000/Add";
+  // carDetail page url
+  const carDetailUrl = `http://localhost:3000/detail/${id}`;
+  // user profile page url
+  const userProfileUrl = "http://localhost:3000/userProfile/";
+
+  // define state for visible and unVisible icons in the text box
+  const [emailIcon, setEmailIcon] = useState(true);
+  const [passwordIcon, setPasswordIcon] = useState(true);
+  const [personAddIcon, setPersonAddIcon] = useState(true);
 
   const handleSubmit = async (e) => {
-    const res = await axios.post("https://reqres.in/api/users", {
-      first_name,
-      last_name,
-      email,
-      avatar,
-    });
-    console.log(res);
-
-    setEmail("");
-    setFirstName("");
-    setLastName("");
-    setImage("");
+    e.preventDefault();
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+    console.log(formData);
+    const respose = await axios
+      .post("http://localhost:8000/api/registe/", formData)
+      .catch((error) => {
+        setErrors("there is some error");
+      });
   };
 
-  const handleReset = () => {
-    setEmail("");
-    setFirstName("");
-    setLastName("");
-    setImage("");
-  };
-
-  useEffect(() => {
-    const getUser = async () => {
-      const result = await axios.get("https://reqres.in/api/users");
-      setUser(result.data.data);
-    };
-    getUser();
-  }, []);
-
-  // define state for visible and unVisible icons in text field
-
-  const [firstNameIcon, setFirstNameIcon] = useState(true);
-  const [lastNameIcon, setLastNameIcon] = useState(true);
-  const [emailIcon, setEmailIcon] = useState(true);
   return (
-    <Grid container>
+    <Grid item lg={12} md={12} sm={12} xs={12}>
       <Box
-        sx={{ width: 600, margin: "0px auto" }}
         bgcolor={"background.default"}
         color={"text.primary"}
+        sx={{
+          width: 600,
+          margin: "0px auto",
+          mt: 7,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <Box
           sx={{
@@ -82,30 +72,35 @@ const Regisrer = () => {
             alignItems: "center",
           }}
         >
-          <PersonAddIcon sx={{ fontSize: "40px" }} />
-          <Typography variant="h5">Sign Up</Typography>
+          <LockOpenIcon sx={{ fontSize: "40px" }} />
+          <Typography variant="h6">Sign In</Typography>
         </Box>
-        <Box>
-          <Form encType="multipart/form-data" onSubmit={handleSubmit}>
+        <Typography color={"red"} fontSize={"12px"}>
+          {errors}
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <form autoComplete="off" onSubmit={handleSubmit}>
             <TextField
-              sx={{ mt: 1.5, width: 600 }}
+              sx={{ mt: 2, width: 600 }}
               size="small"
-              label="First Name"
+              label="username"
               type="text"
-              value={first_name}
-              onChange={(e) => setFirstName(e.target.value)}
-              onFocus={() => {
-                setFirstNameIcon(false);
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
               }}
-              onPointerLeave={() => {
-                setFirstNameIcon(true);
+              onFocus={() => {
+                setPersonAddIcon(false);
+              }}
+              onBlur={() => {
+                setPersonAddIcon(true);
               }}
               InputProps={{
                 startAdornment: (
                   <>
-                    {firstNameIcon ? (
+                    {personAddIcon ? (
                       <InputAdornment position="start">
-                        <PersonIcon />
+                        <PersonAddIcon />
                       </InputAdornment>
                     ) : (
                       ""
@@ -115,43 +110,18 @@ const Regisrer = () => {
               }}
             />
             <TextField
-              sx={{ mt: 1.5, width: 600 }}
+              sx={{ mt: 2, width: 600 }}
               size="small"
-              label="Last Name"
-              type="text"
-              value={last_name}
-              onChange={(e) => setLastName(e.target.value)}
-              onFocus={() => {
-                setLastNameIcon(false);
-              }}
-              onPointerLeave={() => {
-                setLastNameIcon(true);
-              }}
-              InputProps={{
-                startAdornment: (
-                  <>
-                    {lastNameIcon ? (
-                      <InputAdornment position="start">
-                        <PersonIcon />
-                      </InputAdornment>
-                    ) : (
-                      ""
-                    )}
-                  </>
-                ),
-              }}
-            />
-            <TextField
-              sx={{ mt: 1.5, width: 600 }}
-              size="small"
-              label="Email"
+              label="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
               onFocus={() => {
                 setEmailIcon(false);
               }}
-              onPointerLeave={() => {
+              onBlur={() => {
                 setEmailIcon(true);
               }}
               InputProps={{
@@ -169,44 +139,81 @@ const Regisrer = () => {
               }}
             />
             <TextField
+              sx={{ mt: 2, width: 600 }}
               size="small"
-              sx={{ mt: 1.5, width: 600 }}
-              type="file"
-              accept="image/jpeg,image/png,image/gif"
-              onChange={(e) => setImage({ avatar: e.target.files[0] })}
-              style={{ marginTop: 10 }}
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              onFocus={() => {
+                setPasswordIcon(false);
+              }}
+              onBlur={() => {
+                setPasswordIcon(true);
+              }}
+              InputProps={{
+                startAdornment: (
+                  <>
+                    {passwordIcon ? (
+                      <InputAdornment position="start">
+                        <LockIcon />
+                      </InputAdornment>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                ),
+              }}
             />
-            <Button type="submit" variant="outlined">
-              Submit
-            </Button>
-          </Form>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "end",
+                mt: 2,
+              }}
+            >
+              <Button
+                variant="outlined"
+                sx={{ width: 147, mr: 1 }}
+                startIcon={<RestartAltIcon />}
+                type="reset"
+              >
+                Reset
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ width: 147, ml: 1 }}
+                endIcon={<SendIcon />}
+                type="submit"
+                disabled={sending}
+              >
+                Submet
+              </Button>
+            </Box>
+          </form>
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
-              mt: 2.5,
+              mt: 3,
+              ml: 4,
             }}
           >
-            <Typography>I regestred alredy</Typography>
-            <Typography>/</Typography>
-            <Link to="/signin/">
-              <Typography sx={{ textDecoration: "underline", color: "blue" }}>
-                Sign in
+            <Typography color={"blue"}>Forgot Your Password? </Typography>
+            <Typography ml={1}>/</Typography>
+            <Link to="/signup/">
+              <Typography
+                sx={{ textDecoration: "underline", color: "blue", ml: 1 }}
+              >
+                Sign Up
               </Typography>
             </Link>
           </Box>
         </Box>
-      </Box>
-      <Box>
-        {users.map((user, i) => (
-          <>
-            <li>
-              {user.first_name} --- {user.last_name}
-            </li>
-            <p>{user.email}</p>
-          </>
-        ))}
       </Box>
     </Grid>
   );

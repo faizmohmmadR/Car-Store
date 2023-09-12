@@ -13,7 +13,7 @@ import Users from "./Components/Delete";
 import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/UpdateCar";
-import App from "./Components/App"
+import App from "./Components/App";
 import Regisrer1 from "./Components/user/Register1";
 import Login from "./Components/user/Login";
 
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup/",
-    element: <SignUp />,
+    element: <Regisrer />,
   },
   {
     path: "/signin/:id/",
@@ -61,11 +61,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/reg1/",
-    element: <Regisrer1/>,
+    element: <Regisrer1 />,
   },
   {
     path: "/log/",
-    element: <Login/>,
+    element: <Login />,
   },
   // practice
   {
