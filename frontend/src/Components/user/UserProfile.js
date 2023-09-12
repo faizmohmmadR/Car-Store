@@ -18,16 +18,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getAllCars, deleteCar } from "../../Api";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  localStorage.setItem('redirectURL',window.location.href)
+  const navigat = useNavigate();
+  localStorage.setItem("redirectURL", window.location.href);
   const token = localStorage.getItem("token");
 
-  const handleDelete = () =>{
-    let del =window.confirm('Are you sure!')
-    return del
-  }
-
+  const handleDelete = () => {
+    let del = window.confirm("Are you sure!");
+    return del;
+  };
 
   const queryClient = useQueryClient();
   const { isLoading, isError, error, data } = useQuery("car", getAllCars);
@@ -44,10 +45,10 @@ const UserProfile = () => {
   return (
     <Grid bgcolor={"background.default"} color={"text.primary"} fullWidth>
       {!token ? (
-        (window.location = "/signin/:id/")
+        navigat("/signin/")
       ) : (
         <Grid container>
-          <Grid lg={12} xs={12} sm={12} md={12}>
+          <Grid lg={12} xs={12} sm={12} md={12} display="none">
             <Card sx={{ margin: "0px auto", padding: 2, bgcolor: "gray" }}>
               <CardMedia
                 sx={{
@@ -67,11 +68,11 @@ const UserProfile = () => {
               variant="h4"
               padding={1}
               borderBottom={"2px solid gray"}
-              width={160}
+              width={200}
             >
-              Your Cars
+              Your Adds
             </Typography>
-            <Paper fullWidth>
+            <Paper sx={{ margin: "20px auto", width: "80vw" }}>
               <TableContainer component={Paper}>
                 <Table
                   area-aria-label="simple table"
@@ -140,9 +141,12 @@ const UserProfile = () => {
                           <TableCell>
                             <Button>
                               <DeleteIcon
-                                onClick={() => {<>
-                                  {handleDelete() ? delet.mutate({ id: car.id }) : null}
-                                  </>
+                                onClick={() => {
+                                  <>
+                                    {handleDelete()
+                                      ? delet.mutate({ id: car.id })
+                                      : null}
+                                  </>;
                                 }}
                                 sx={{
                                   color: "red",
@@ -160,12 +164,13 @@ const UserProfile = () => {
             </Paper>
             <Link to="/">
               <Button
-                fullWidth
                 onClick={() => {}}
                 variant="outlined"
                 sx={{
+                  width: "80vw",
                   bgcolor: "blue",
                   color: "white",
+                  mb: '10px',
                   ":hover": { bgcolor: "darkblue" },
                 }}
               >

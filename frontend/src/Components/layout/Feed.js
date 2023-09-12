@@ -1,11 +1,12 @@
 import React from "react";
-import Cars from "./Cars";
+
 import { Grid } from "@mui/material";
 import { useQuery } from "react-query";
-import { getAllCars } from "../Api";
+import { getAllCars } from "../../Api";
+import Cars from "../car/Cars";
 
 const Feed = (props) => {
-  localStorage.setItem('redirectURL',window.location.href)
+  localStorage.setItem("redirectURL", window.location.href);
   const { isLoading, isError, error, data, isSuccess } = useQuery(
     "car",
     getAllCars

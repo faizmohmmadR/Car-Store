@@ -9,7 +9,6 @@ import {
   Grid,
   Paper,
 } from "@mui/material";
-import { useEffect } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
@@ -18,57 +17,29 @@ import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import PlaceIcon from "@mui/icons-material/Place";
 import PinIcon from "@mui/icons-material/Pin";
-import FiberNewIcon from "@mui/icons-material/FiberNew";
 import React, { useState } from "react";
 import Select from "@mui/material/Select";
 import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getcar, updateCar, getAllCars } from "../Api";
-
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Form } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-
-const UpdateCar = () => {
-  const token = localStorage.getItem("teken");
+const Add = () => {
+  
   // use quireClient form caching data
   const quireClient = useQueryClient();
   const { id } = useParams();
 
-
-
-
-  const [name,setName] = useState('')
-  const [description,setDecription] = useState('')
-  const [price,setPrice] = useState('')
-  const [enginType,setEnginType] = useState('')
-  const [numberPalit,setNumberPalit] = useState('')
-  const [carState,setCarState] = useState('')
-  const [carSellState,setCarSellStat] = useState('')
-  const [image, setImage] = useState('')
-  const [user, setUser] = useState('')
-  const [address,setAddress] = useState('')
-
-  const loadData = async() =>{
-    const {data} = await axios.get(`http://localhost:8000/api/car/${id}/`);
-    console.log(data)
-    setName(data.name)
-    setDecription(data.description)
-    setPrice(data.price)
-    setEnginType(data.enginType)
-    setNumberPalit(data.numberPalit)
-    setCarState(data.carState)
-    setCarSellStat(data.carSellState)
-    setUser(data.user)
-    setAddress(data.address)
-  }
-
-  useEffect(() => {
-  loadData()
-  }, [])
+  const [name, setName] = useState("");
+  const [description, setDecription] = useState("");
+  const [price, setPrice] = useState("");
+  const [enginType, setEnginType] = useState("");
+  const [numberPalit, setNumberPalit] = useState("");
+  const [carState, setCarState] = useState("");
+  const [carSellState, setCarSellStat] = useState("");
+  const [image, setImage] = useState("");
+  const [user, setUser] = useState("");
+  const [address, setAddress] = useState("");
 
   // define and set useState for visible and un visible icons on the text fields
   const [nameIcon, setNameIcon] = useState(true);
@@ -78,35 +49,35 @@ const UpdateCar = () => {
   const [numberPalitIcon, setNumberPalitIcon] = useState(true);
   const [userIcon, setUserIcon] = useState(true);
   const [addressIcon, setAddressIcon] = useState(true);
-  const handleSubmit = (e) =>{
-    e.preventDefualt()
-  } 
-  const handleUpdate = async () =>{
-    let formData = new FormData()
-    if(image !== null){
-      formData.append("image",image)
+  const handleSubmit = (e) => {
+    e.preventDefualt();
+  };
+  const handleUpdate = async () => {
+    let formData = new FormData();
+    if (image !== null) {
+      formData.append("image", image);
     }
-    formData.append("name",name)
-    formData.append("description",description)
-    formData.append("price",price)
-    formData.append("enginType",enginType)
-    formData.append("numberPalit",numberPalit)
-    formData.append("carState",carState)
-    formData.append("carSellState",carSellState)
-    formData.append("user",user)
-    formData.append("address",address)
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("enginType", enginType);
+    formData.append("numberPalit", numberPalit);
+    formData.append("carState", carState);
+    formData.append("carSellState", carSellState);
+    formData.append("user", user);
+    formData.append("address", address);
 
     await axios({
-      method: 'PUT',
-      url: `http://localhost:8000/api/car/${id}/`,
+      method: "POST",
+      url: `http://localhost:8000/api/car/`,
       data: formData,
-    }).then(response=>{console.log(response.data)
-      window.location = '/'
-    
-    })
-  }
-    return (
-      <Grid container width={"65%"} margin={"0px auto"}>
+    }).then((response) => {
+      console.log(response.data);
+      window.location = "/";
+    });
+  };
+  return (
+    <Grid container margin={"0px auto"}>
         <Paper>
           <Box sx={{ margin: "0px auto", width: "80%" }} textAlign="center">
             <Typography
@@ -116,7 +87,7 @@ const UpdateCar = () => {
               margin={"0px auto"}
               pt={1}
             >
-              Update Car
+              Add Car
             </Typography>
             <form
               onSubmit={handleSubmit}
@@ -132,7 +103,9 @@ const UpdateCar = () => {
                 type="text"
                 name="name"
                 value={name}
-                onChange={(e)=>{setName(e.target.value)}}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
                 onFocus={() => {
                   setNameIcon(false);
                 }}
@@ -159,7 +132,9 @@ const UpdateCar = () => {
                 size="small"
                 style={{ marginTop: 5 }}
                 type="file"
-                onChange={(e)=>{setImage(e.target.files[0])}}
+                onChange={(e) => {
+                  setImage(e.target.files[0]);
+                }}
               />
 
               <TextField
@@ -172,7 +147,9 @@ const UpdateCar = () => {
                 type="text"
                 // formik for handle forms
                 value={description}
-                onChange={(e)=>{setDecription(e.target.value)}}
+                onChange={(e) => {
+                  setDecription(e.target.value);
+                }}
                 onFocus={() => {
                   setDescriptionIcon(false);
                 }}
@@ -201,7 +178,9 @@ const UpdateCar = () => {
                 type="number"
                 // formik for handle forms
                 value={price}
-                onChange={(e)=>{setPrice(e.target.value)}}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
                 onFocus={() => {
                   setPriceIcon(false);
                 }}
@@ -231,7 +210,9 @@ const UpdateCar = () => {
                 type="text"
                 // formik for handle forms
                 value={enginType}
-                onChange={(e)=>{setEnginType(e.target.value)}}
+                onChange={(e) => {
+                  setEnginType(e.target.value);
+                }}
                 onFocus={() => {
                   setEnginTypeIcon(false);
                 }}
@@ -261,7 +242,9 @@ const UpdateCar = () => {
                 type="text"
                 // formik for handle forms
                 value={numberPalit}
-                onChange={(e)=>{setNumberPalit(e.target.value)}}
+                onChange={(e) => {
+                  setNumberPalit(e.target.value);
+                }}
                 onFocus={() => {
                   setNumberPalitIcon(false);
                 }}
@@ -287,7 +270,9 @@ const UpdateCar = () => {
                 <Select
                   label="carState"
                   value={carState}
-                  onChange={(e)=>{setCarState(e.target.value)}}
+                  onChange={(e) => {
+                    setCarState(e.target.value);
+                  }}
                 >
                   <MenuItem>
                     <em>None</em>
@@ -302,7 +287,9 @@ const UpdateCar = () => {
                 <Select
                   label="SellingState"
                   value={carSellState}
-                  onChange={(e)=>{setCarSellStat(e.target.value)}}
+                  onChange={(e) => {
+                    setCarSellStat(e.target.value);
+                  }}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -320,7 +307,9 @@ const UpdateCar = () => {
                 type="number"
                 // formik for handle forms
                 value={user}
-                onChange={(e)=>{setUser(e.target.value)}}
+                onChange={(e) => {
+                  setUser(e.target.value);
+                }}
                 onFocus={() => {
                   setUserIcon(false);
                 }}
@@ -350,7 +339,9 @@ const UpdateCar = () => {
                 type="number"
                 // formik for handle forms
                 value={address}
-                onChange={(e)=>{setAddress(e.target.value)}}
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                }}
                 onFocus={() => {
                   setAddressIcon(false);
                 }}
@@ -388,7 +379,6 @@ const UpdateCar = () => {
                   sx={{ mr: 1 }}
                   startIcon={<RestartAltIcon />}
                   type="reset"
-                  
                 >
                   Reset
                 </Button>
@@ -407,7 +397,7 @@ const UpdateCar = () => {
             </form>
           </Box>
         </Paper>
-      </Grid>
-    );
-  }
-export default UpdateCar;
+    </Grid>
+  );
+};
+export default Add;

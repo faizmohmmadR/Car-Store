@@ -43,12 +43,7 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
-# class UserSerializer(serializers.ModelSerializer):
 
-#     class Meta:
-#         model = User
-#         # fields = ('firstName','lastName','userName','email','userType','phone','image')
-#         fields = '__all__'
 
 class AddressSerializer(serializers.ModelSerializer):
 
