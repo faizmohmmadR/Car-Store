@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from  api.views import *
-from knox import views as knox_views
+from knox.views import LogoutView
 router = routers.DefaultRouter()
 # router.register(r"user", UserViewSet)
 router.register(r"address",AdderssViewSet)
@@ -25,10 +25,9 @@ urlpatterns = [
     path("carPost/",carPost),
     path("carUpdate/<pk>",carUpdate),
     # user endpoints
-    path('auth/', include('knox.urls')),
-    path('auth/register', SignUpAPI.as_view()),
-    path('auth/login', SignInAPI.as_view()),
-    path('auth/user', MainUser.as_view()),
-    path('auth/logout',knox_views.LogoutView.as_view(), name="knox-logout"),
+    path('user', UserAPIView.as_view()),
+    path('register', RegisterAPIView.as_view()),
+    path('login', LoginAPIView.as_view()),
+    path('logout', LogoutView.as_view(), name='knox_logout')
 
 ]
