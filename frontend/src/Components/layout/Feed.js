@@ -1,9 +1,10 @@
 import React from "react";
 
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { getAllCars } from "../../Api";
 import Cars from "../car/Cars";
+import Slider from "../slider/Slider";
 
 const Feed = (props) => {
   localStorage.setItem("redirectURL", window.location.href);
@@ -18,11 +19,20 @@ const Feed = (props) => {
     return <div>Error! {error.message}</div>;
   } else if (isSuccess)
     return (
-      <Grid flex={7} container spacing={2} pt={1}>
-        {data.map((car, i) => {
-          return <Cars key={car.id} car={car} />;
-        })}
-      </Grid>
+      <>
+        <Slider data={data} />
+
+        <Grid bgcolor={"#e6edf7"} color={"#34164a"} padding={"10px"}>
+          <Typography variant="h3" align="center">
+            Products
+          </Typography>
+          <Grid flex={7} container spacing={2} pt={1}>
+            {data.map((car, i) => {
+              return <Cars key={car.id} car={car} />;
+            })}
+          </Grid>
+        </Grid>
+      </>
     );
 };
 

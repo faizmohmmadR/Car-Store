@@ -13,8 +13,10 @@ import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import { Box } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 const Cars = (props) => {
+  const navigat = useNavigate();
   const car = props.car;
   // const [isFlipped, setIsFlipped] = useState(false);
 
@@ -36,9 +38,7 @@ const Cars = (props) => {
         <Box
           onClick={() => {
             {
-              !token
-                ? (window.location = "/signin/:id")
-                : (window.location = `/detail/${car.id}`);
+              !token ? navigat("/signin/:id") : navigat(`/detail/${car.id}`);
             }
           }}
         >
@@ -63,13 +63,22 @@ const Cars = (props) => {
             // }}
           />
           <CardContent sx={{ height: 70 }}>
-            <Typography  sx={{fontSize: {lg: '20.28px',md: '19px',sm: '12px',xs: '19px'}}}>
+            <Typography
+              sx={{
+                fontSize: {
+                  lg: "20.28px",
+                  md: "19px",
+                  sm: "11.5px",
+                  xs: "19px",
+                },
+              }}
+            >
               {car.name.length <= 17 ? car.name : `${car.name.slice(0, 17)}...`}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {car.description.length <= 70
                 ? car.description
-                : `${car.description.slice(0, 70)}...`}
+                : `${car.description.slice(0, 60)}...`}
             </Typography>
           </CardContent>
         </Box>

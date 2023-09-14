@@ -1,13 +1,21 @@
 import React from "react";
 import SideBar from "./layout/SideBar";
 import NavBar from "./layout/NavBar";
-import { Box, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
+import {
+  Box,
+  Container,
+  createTheme,
+  Grid,
+  ThemeProvider,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import AddCarButton from "../Components/car/AddCarButton";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getAllCars } from "../Api";
+import Slider from "./slider/Slider";
+import Footer from "./layout/Footer";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -32,27 +40,35 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <Box bgcolor={"background.default"} color={"text.primary"}>
           <NavBar data={data} />
-          <Stack direction="row" spacing={2} justifyContent="space-between">
-            <Grid
+          <Container>
+            <Stack
+              direction="column"
+              spacing={2}
+              justifyContent="center"
               sx={{
-                display: { lg: "block", md: "block", sm: "block", xs: "none" },
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <SideBar setMode={setMode} mode={mode} />
-            </Grid>
-            <Grid
-              item
-              sm={12}
-              xs={12}
-              md={6}
-              lg={4}
-              sx={{ width: { lg: "76%", md: "72%", sm: "72%", xs: "90%" } }}
-            >
-              <div id="detail">
-                <Outlet data={data} />
-              </div>
-            </Grid>
-          </Stack>
+              <Grid
+                item
+                sm={12}
+                xs={12}
+                md={6}
+                lg={4}
+                sx={{
+                  width: { lg: "76%", md: "72%", sm: "72%", xs: "90%" },
+                }}
+              >
+                <div id="detail" style={{ margin: "0px auto" }}>
+                  <Outlet data={data} />
+                </div>
+              </Grid>
+            </Stack>
+            <Footer />
+          </Container>
           <AddCarButton />
         </Box>
       </ThemeProvider>
