@@ -13,7 +13,6 @@ import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/car/UpdateCar";
 import App from "./Components/App";
 
-
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -29,15 +28,15 @@ const router = createBrowserRouter([
         path: "/add/",
         element: <Add />,
       },
+      {
+        path: "/detail/:id/",
+        element: <CarDetail />,
+      },
+      {
+        path: "/userProfile/",
+        element: <UserProfile />,
+      },
     ],
-  },
-  {
-    path: "/detail/:id/",
-    element: <CarDetail />,
-  },
-  {
-    path: "/userProfile/",
-    element: <UserProfile />,
   },
   {
     path: "/signup/",
