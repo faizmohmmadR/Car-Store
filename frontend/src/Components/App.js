@@ -67,9 +67,9 @@ function App() {
                 </div>
               </Grid>
             </Stack>
-            <Footer />
           </Container>
           <AddCarButton />
+          <Footer />
         </Box>
       </ThemeProvider>
     );

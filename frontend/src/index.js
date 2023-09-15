@@ -12,6 +12,8 @@ import Regisrer from "./Components/user/Regisrer";
 import Logout from "./Components/user/Logout";
 import UpdateCar from "./Components/car/UpdateCar";
 import App from "./Components/App";
+import ContactUs from "./Components/layout/ContactUs";
+import AboutUs from "./Components/layout/AboutUs";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
       {
         path: "/userProfile/",
         element: <UserProfile />,
+      },
+      {
+        path: "/contuctus/",
+        element: <ContactUs />,
+      },
+      {
+        path: "/aboutus/",
+        element: <AboutUs />,
       },
     ],
   },

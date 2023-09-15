@@ -38,7 +38,7 @@ const Cars = (props) => {
         <Box
           onClick={() => {
             {
-              !token ? navigat("/signin/:id") : navigat(`/detail/${car.id}`);
+              !token ? navigat("/signin/") : navigat(`/detail/${car.id}`);
             }
           }}
         >

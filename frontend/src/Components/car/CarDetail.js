@@ -36,7 +36,7 @@ const CarDetail = () => {
       setShowFullText(!showFullText);
     };
     const compresedText = description.slice(0, 20);
-    console.log(data)
+  
     return (
       <Grid container item lg={12} xs={12} md={12} sm={12}>
         <Grid sx={{ width: "60vw", margin: "0px auto" }}>
