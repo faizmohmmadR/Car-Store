@@ -17,7 +17,7 @@ class Car(models.Model):
     enginType = models.CharField(max_length=50,null=True,blank=True)
     numberPalit = models.CharField(max_length=50,null=True,blank=True)
     carState = models.CharField(max_length=20)
-    carSellState = models.CharField(max_length=50,null=True,blank=True)
+    # carSellState = models.CharField(max_length=50,null=True,blank=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ad_user")
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="ad_address")

@@ -12,7 +12,6 @@ const Feed = (props) => {
     "car",
     getAllCars
   );
-
   if (isLoading) {
     return <div>Loading...</div>;
   } else if (isError) {

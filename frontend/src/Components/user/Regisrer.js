@@ -1,28 +1,60 @@
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
-import { InputAdornment } from "@mui/material";
+import React, { useEffect, useState } from "react";
 // impor icons
-
+import { InputAdornment } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
 import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import EmailIcon from "@mui/icons-material/Email";
-import LockIcon from "@mui/icons-material/Lock";
-
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-const Regisrer = () => {
-  const navigate = useNavigate();
-  const [errors, setErrors] = useState("");
-  const [sending, setSending] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
+function Validation(values) {
+  const errors = {};
+  const validUserName = /([a-zA-Z_](\d*)){2,55}/g;
+  const validPassword = /[0-9a-zA-Z\D]{4,16}/;
+  const validEmail = /[a-zA-Z0-9]{2,52}\@[[a-z]{2,8}]*\.[a-z]{2,8}/g;
+  let usernameErrors = false;
+  let passwordErrors = false;
+  let emailErrors = false;
+  if (values.username === "") {
+    errors.username = "Username is required!";
+  } else if (!validUserName.test(values.username)) {
+    errors.username = "Invalid userName, The username must be between 2-55";
+  } else {
+    usernameErrors = true;
+  }
+  if (values.email === "") {
+    errors.email = "email is required!";
+  } else if (!validEmail.test(values.email)) {
+    errors.email = "Invalid Email!, tri again!!";
+  } else {
+    emailErrors = true;
+  }
+  if (values.password === "") {
+    errors.password = "Password is required!";
+  } else if (!validPassword.test(values.password)) {
+    errors.password = "Password should be between 4-16 characters!";
+  } else {
+    passwordErrors = true;
+  }
+
+  if (
+    usernameErrors === true &&
+    passwordErrors === true &&
+    emailErrors === true
+  ) {
+    return true;
+  } else {
+    return errors;
+  }
+}
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { fromPairs, result } from "lodash";
+const Regisrer = () => {
   const id = useParams();
   //get redurec url
   const redirectURL = localStorage.getItem("redirectURL");
@@ -32,25 +64,43 @@ const Regisrer = () => {
   const carDetailUrl = `http://localhost:3000/detail/${id}`;
   // user profile page url
   const userProfileUrl = "http://localhost:3000/userProfile/";
-
+  const navigate = useNavigate();
   // define state for visible and unVisible icons in the text box
   const [emailIcon, setEmailIcon] = useState(true);
   const [passwordIcon, setPasswordIcon] = useState(true);
-  const [personAddIcon, setPersonAddIcon] = useState(true);
+  // const [errors, setErrors] = useState();
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [resultError, setResultError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  function handleInput(e) {
+    const newObj = { ...values, [e.target.name]: e.target.value };
+    setValues(newObj);
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    let formData = new FormData();
-    formData.append("username", username);
-    formData.append("email", email);
-    formData.append("password", password);
-    console.log(formData);
-    const respose = await axios
-      .post("http://localhost:8000/api/registe/", formData)
-      .catch((error) => {
-        setErrors("there is some error");
-      });
-  };
+    const validation = Validation(values);
+    if (!(validation === true)) {
+      setErrors(validation);
+    } else {
+      setValues("");
+      setErrors("");
+      setSending(true);
+      const respose = await axios
+        .post("http://localhost:8000/api/register", values)
+        .catch((e) => {
+          setResultError("something is wrong, Tray agin!");
+        });
+      setSending(false);
+    }
+  }
 
   return (
     <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -76,7 +126,7 @@ const Regisrer = () => {
           <Typography variant="h6">Sign In</Typography>
         </Box>
         <Typography color={"red"} fontSize={"12px"}>
-          {errors}
+          {resultError}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <form autoComplete="off" onSubmit={handleSubmit}>
@@ -84,23 +134,23 @@ const Regisrer = () => {
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="username"
+              name="username"
               type="text"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
+              helperText={errors.username}
+              error={errors.username}
+              onChange={handleInput}
               onFocus={() => {
-                setPersonAddIcon(false);
+                setEmailIcon(false);
               }}
               onBlur={() => {
-                setPersonAddIcon(true);
+                setEmailIcon(true);
               }}
               InputProps={{
                 startAdornment: (
                   <>
-                    {personAddIcon ? (
+                    {emailIcon ? (
                       <InputAdornment position="start">
-                        <PersonAddIcon />
+                        <EmailIcon />
                       </InputAdornment>
                     ) : (
                       ""
@@ -113,11 +163,11 @@ const Regisrer = () => {
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="email"
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              helperText={errors.email}
+              error={errors.email}
+              onChange={handleInput}
               onFocus={() => {
                 setEmailIcon(false);
               }}
@@ -143,10 +193,10 @@ const Regisrer = () => {
               size="small"
               label="Password"
               type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              name="password"
+              helperText={errors.password}
+              error={errors.password}
+              onChange={handleInput}
               onFocus={() => {
                 setPasswordIcon(false);
               }}
