@@ -1,6 +1,6 @@
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // impor icons
 import { InputAdornment } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
@@ -8,12 +8,39 @@ import LockIcon from "@mui/icons-material/Lock";
 import SendIcon from "@mui/icons-material/Send";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+function Validation(values) {
+  const validPassword = /[0-9a-zA-Z\D]{4,16}/;
+  const validUserName = /([a-zA-Z_](\d*)){2,55}/g;
+  const errors = {};
+  let usernameErrors = false;
+  let passwordErrors = false;
+  if (values.username === "") {
+    errors.username = "Username is required!";
+  } else if (!validUserName.test(values.username)) {
+    errors.username = "Invalid userName, The username must be between 2-55";
+  } else {
+    usernameErrors = true;
+  }
+  if (values.password === "") {
+    errors.password = "Password is required!";
+  } else if (!validPassword.test(values.password)) {
+    errors.password = "Password should be between 4-16 characters!";
+  } else {
+    passwordErrors = true;
+  }
+
+  if (usernameErrors === true && passwordErrors === true) {
+    return true;
+  } else {
+    return errors;
+  }
+}
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { result } from "lodash";
 const SignIn = () => {
   const id = useParams();
   //get redurec url
@@ -25,31 +52,42 @@ const SignIn = () => {
   // user profile page url
   const userProfileUrl = "http://localhost:3000/userProfile/";
   const navigate = useNavigate();
-  const [errors, setErrors] = useState("");
-  const [sending, setSending] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
   // define state for visible and unVisible icons in the text box
   const [emailIcon, setEmailIcon] = useState(true);
   const [passwordIcon, setPasswordIcon] = useState(true);
+  // const [errors, setErrors] = useState();
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [resultError, setResultError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+  });
+
+  function handleInput(e) {
+    const newObj = { ...values, [e.target.name]: e.target.value };
+    setValues(newObj);
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-
-    const formData = new FormData();
-
-    formData.append("username", username);
-    formData.append("password", password);
-
-    try {
+    const validation = Validation(values);
+    if (!(validation === true)) {
+      setErrors(validation);
+    } else {
+      setErrors("");
       setSending(true);
-      const result = await axios.post(
-        "http://localhost:8000/api/login",
-        formData
-      );
+      const result = await axios
+        .post("http://localhost:8000/api/login", values)
+        .catch((e) => {
+          setResultError("Email or Password is Wrong!!");
+          setSending(false);
+        });
+      setValues("");
       setSending(false);
       localStorage.setItem("token", result.data.token);
+      localStorage.setItem('user',JSON.stringify(result.data.user))
       if (redirectURL === userProfileUrl) {
         navigate("/userProfile/");
       } else if (redirectURL === addPageUrl) {
@@ -59,12 +97,9 @@ const SignIn = () => {
       } else {
         navigate("/");
       }
-    } catch (error) {
-      setErrors("username or password is not correct!");
-      setSending(false);
     }
-  };
-
+  }
+  console.log(JSON.parse(localStorage.getItem('user')))
   return (
     <Grid item lg={12} md={12} sm={12} xs={12}>
       <Box
@@ -89,7 +124,7 @@ const SignIn = () => {
           <Typography variant="h6">Sign In</Typography>
         </Box>
         <Typography color={"red"} fontSize={"12px"}>
-          {errors}
+          {resultError}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <form autoComplete="off" onSubmit={handleSubmit}>
@@ -97,11 +132,11 @@ const SignIn = () => {
               sx={{ mt: 2, width: 600 }}
               size="small"
               label="username"
+              name="username"
               type="text"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
+              helperText={errors.username}
+              error={errors.username}
+              onChange={handleInput}
               onFocus={() => {
                 setEmailIcon(false);
               }}
@@ -127,10 +162,10 @@ const SignIn = () => {
               size="small"
               label="Password"
               type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              name="password"
+              helperText={errors.password}
+              error={errors.password}
+              onChange={handleInput}
               onFocus={() => {
                 setPasswordIcon(false);
               }}
