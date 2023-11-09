@@ -56,6 +56,7 @@ import { useParams } from "react-router-dom";
 import { fromPairs, result } from "lodash";
 const Regisrer = () => {
   const id = useParams();
+  const [success,setSuccess] = useState('')
   //get redurec url
   const redirectURL = localStorage.getItem("redirectURL");
   // add page url
@@ -94,11 +95,14 @@ const Regisrer = () => {
       setErrors("");
       setSending(true);
       const respose = await axios
-        .post("http://localhost:8000/api/register", values)
+        .post("http://localhost:8000/api/register", values).then((e)=>{
+          setSuccess("uare registred! Succsessfully!!")
+        })
         .catch((e) => {
           setResultError("something is wrong, Tray agin!");
         });
       setSending(false);
+      navigate("/");
     }
   }
 
@@ -125,6 +129,7 @@ const Regisrer = () => {
           <LockOpenIcon sx={{ fontSize: "40px" }} />
           <Typography variant="h6">Sign In</Typography>
         </Box>
+        <Typography>{success}</Typography>
         <Typography color={"red"} fontSize={"12px"}>
           {resultError}
         </Typography>
