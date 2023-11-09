@@ -21,6 +21,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
   const navigat = useNavigate();
   localStorage.setItem("redirectURL", window.location.href);
   const token = localStorage.getItem("token");
@@ -104,59 +106,63 @@ const UserProfile = () => {
                   </TableHead>
                   {data.map((car, i) => {
                     return (
-                      <TableBody>
-                        <TableRow>
-                          <TableCell component="th" scope="row">
-                            {i + 1}
-                          </TableCell>
-                          <TableCell>{car.name}</TableCell>
-                          <TableCell>
-                            {car.description.length > 20
-                              ? `${car.description.slice(0, 20)}...`
-                              : car.description}
-                          </TableCell>
-                          <TableCell>{car.price}$</TableCell>
-                          <TableCell>{car.enginType}</TableCell>
-                          <TableCell>{car.carState}</TableCell>
-                          <TableCell>{car.carSellState}</TableCell>
-                          <TableCell>
-                            {car.createdAt.length > 11
-                              ? `${car.createdAt.slice(0, 10)}`
-                              : ""}
-                          </TableCell>
-                          <TableCell>{car.user}</TableCell>
-                          <TableCell>{car.address}</TableCell>
-                          <TableCell>
-                            <Link to={`/update/${car.id}`}>
-                              <Button>
-                                <EditIcon
-                                  sx={{
-                                    color: "blue",
-                                    ":hover": { cursor: "pointer" },
-                                  }}
-                                />
-                              </Button>
-                            </Link>
-                          </TableCell>
-                          <TableCell>
-                            <Button>
-                              <DeleteIcon
-                                onClick={() => {
-                                  <>
-                                    {handleDelete()
-                                      ? delet.mutate({ id: car.id })
-                                      : null}
-                                  </>;
-                                }}
-                                sx={{
-                                  color: "red",
-                                  ":hover": { cursor: "pointer" },
-                                }}
-                              />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
+                      <>
+                        {user.id === car.user && (
+                          <TableBody>
+                            <TableRow>
+                              <TableCell component="th" scope="row">
+                                {i + 1}
+                              </TableCell>
+                              <TableCell>{car.name}</TableCell>
+                              <TableCell>
+                                {car.description.length > 20
+                                  ? `${car.description.slice(0, 20)}...`
+                                  : car.description}
+                              </TableCell>
+                              <TableCell>{car.price}$</TableCell>
+                              <TableCell>{car.enginType}</TableCell>
+                              <TableCell>{car.carState}</TableCell>
+                              <TableCell>{car.carSellState}</TableCell>
+                              <TableCell>
+                                {car.createdAt.length > 11
+                                  ? `${car.createdAt.slice(0, 10)}`
+                                  : ""}
+                              </TableCell>
+                              <TableCell>{car.user}</TableCell>
+                              <TableCell>{car.address}</TableCell>
+                              <TableCell>
+                                <Link to={`/update/${car.id}`}>
+                                  <Button>
+                                    <EditIcon
+                                      sx={{
+                                        color: "blue",
+                                        ":hover": { cursor: "pointer" },
+                                      }}
+                                    />
+                                  </Button>
+                                </Link>
+                              </TableCell>
+                              <TableCell>
+                                <Button>
+                                  <DeleteIcon
+                                    onClick={() => {
+                                      <>
+                                        {handleDelete()
+                                          ? delet.mutate({ id: car.id })
+                                          : null}
+                                      </>;
+                                    }}
+                                    sx={{
+                                      color: "red",
+                                      ":hover": { cursor: "pointer" },
+                                    }}
+                                  />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        )}
+                      </>
                     );
                   })}
                 </Table>
@@ -170,7 +176,7 @@ const UserProfile = () => {
                   width: "80vw",
                   bgcolor: "blue",
                   color: "white",
-                  mb: '10px',
+                  mb: "10px",
                   ":hover": { bgcolor: "darkblue" },
                 }}
               >

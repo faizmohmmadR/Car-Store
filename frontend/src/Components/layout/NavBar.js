@@ -68,6 +68,8 @@ const NavBar = ({ data, mode, setMode }) => {
   let username = ''
    if(JSON.parse(localStorage.getItem("user"))){
     username = JSON.parse(localStorage.getItem("user"))
+   }else{
+    username = ''
    }
   const [open, setOpen] = useState(false);
   const [openSidBar, setOpenSideBar] = useState(false);
@@ -76,6 +78,7 @@ const NavBar = ({ data, mode, setMode }) => {
   const navigat = useNavigate();
 
   const handleLoguot = () => {
+    username = ''
     localStorage.removeItem("token");
     navigat("/");
     setOpen(false);
@@ -236,11 +239,6 @@ const NavBar = ({ data, mode, setMode }) => {
                 <MenuItem onClick={handleLoguot}>Logout</MenuItem>
               )}
             </Menu>
-            <Typography
-              sx={{ display: {lg: 'block', md: "block", sm: "none", xs: "none" } }}
-            >
-              {username.username}
-            </Typography>
           </Grid>
           <Menu
             aria-labelledby="demo-positioned-button"
