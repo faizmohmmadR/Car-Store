@@ -14,15 +14,15 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 const Footer = () => {
   return (
-    <div
+    <Box
       style={{
         paddingTop: "20px",
         marginTop: "20px",
-        backgroundColor: "#1976d2",
-        color: "white",
       }}
+      bgcolor={"background.secondary"}
+      color={"text.primary"}
     >
-      <Container>
+      <Container bgcolor={"background.default"} color={"text.primary"}>
         <Grid container spacing={3} direction="row" justifyContent="center">
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
@@ -38,21 +38,19 @@ const Footer = () => {
               faizmohammadramdel@gmail.com
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid
+            item
+            xs={12}
+            sm={4}
+          >
             <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
-            <Link href="/" color="#fff">
-              Home
-            </Link>
+            <Link href="/">Home</Link>
             <br />
-            <Link href="aboutus" color="#fff">
-              About Us
-            </Link>
+            <Link href="aboutus">About Us</Link>
             <br />
-            <Link href="/contuctus/" color="#fff">
-              Contact Us
-            </Link>
+            <Link href="/contuctus/">Contact Us</Link>
           </Grid>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
@@ -60,13 +58,13 @@ const Footer = () => {
             </Typography>
             <Box sx={{ display: "flex" }}>
               <IconButton href="#" target="_blank" rel="noopener noreferrer">
-                <FacebookIcon sx={{ color: "white" }} />
+                <FacebookIcon />
               </IconButton>
               <IconButton href="#" target="_blank" rel="noopener noreferrer">
-                <TwitterIcon sx={{ color: "white" }} />
+                <TwitterIcon  />
               </IconButton>
               <IconButton href="#" target="_blank" rel="noopener noreferrer">
-                <InstagramIcon sx={{ color: "white" }} />
+                <InstagramIcon />
               </IconButton>
             </Box>
           </Grid>
@@ -77,7 +75,7 @@ const Footer = () => {
           {" Car Store. All rights reserved."}
         </Typography>
       </Container>
-    </div>
+    </Box>
   );
 };
 

@@ -255,11 +255,11 @@ const Regisrer = () => {
           >
             <Typography color={"blue"}>Forgot Your Password? </Typography>
             <Typography ml={1}>/</Typography>
-            <Link to="/signup/">
+            <Link to="/signin/">
               <Typography
                 sx={{ textDecoration: "underline", color: "blue", ml: 1 }}
               >
-                Sign Up
+                Sign in
               </Typography>
             </Link>
           </Box>
