@@ -18,6 +18,7 @@ const Footer = ({mode}) => {
       style={{
         paddingTop: "20px",
         marginTop: "20px",
+        border: '1px solid gray'
       }}
       bgcolor={"background.secondary"}
       color={"text.primary"}

@@ -99,6 +99,7 @@ const Regisrer = () => {
           setResultError("something is wrong, Tray agin!");
         });
       setSending(false);
+      navigate("/");
     }
   }
 
