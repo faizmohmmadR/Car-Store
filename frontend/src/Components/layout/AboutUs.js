@@ -1,14 +1,14 @@
 import React from "react";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Container, Grid, Paper, Typography } from "@mui/material";
 
 const AboutUs = () => {
   return (
-    <div>
-      <Typography variant="h4" mt={1} gutterBottom>
+    <Container>
+      <Typography align="center" variant="h4" mt={3} gutterBottom>
         About Us
       </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+      <Grid container spacing={3} padding="10px">
+        <Grid item xs={12} sm={6} padding='20px'>
           <Paper sx={{ height: "40vh", padding: "10px" }}>
             <Typography variant="h5" gutterBottom>
               Our Mission
@@ -36,7 +36,7 @@ const AboutUs = () => {
           </Paper>
         </Grid>
       </Grid>
-    </div>
+    </Container>
   );
 };
 

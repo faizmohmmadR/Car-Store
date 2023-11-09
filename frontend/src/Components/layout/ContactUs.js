@@ -6,14 +6,15 @@ import {
   Button,
   Box,
   styled,
+  Container,
 } from "@mui/material";
 const ContactUs = () => {
   return (
-    <div>
-      <Typography variant="h4" align="center" gutterBottom>
-        Contact Us
+    <Container>
+      <Typography variant="h4" align="center" gutterBottom mt="20px">
+        CONTACT US
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} padding="50px">
         <Grid item xs={12} md={6}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <Typography variant="h6" gutterBottom>
@@ -80,7 +81,7 @@ const ContactUs = () => {
           </form>
         </Grid>
       </Grid>
-    </div>
+    </Container>
   );
 };
 

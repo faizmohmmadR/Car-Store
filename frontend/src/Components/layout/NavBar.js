@@ -13,6 +13,7 @@ import {
   Paper,
   Modal,
   Container,
+  Grid,
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
@@ -26,6 +27,7 @@ import SideBar from "./SideBar";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 
 import Cars from "../car/Cars";
+import MobileSidebar from "./MobileSidebar";
 
 const StyleToolBar = styled(Toolbar)({
   display: "flex",
@@ -63,6 +65,7 @@ const UserBox = styled(Box)(({ theme }) => ({
 const NavBar = ({ data, mode, setMode }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const token = localStorage.getItem("token");
+  const username = JSON.parse(localStorage.getItem("user"));
   const [open, setOpen] = useState(false);
   const [openSidBar, setOpenSideBar] = useState(false);
   const [search, setSearch] = useState("");
@@ -84,12 +87,18 @@ const NavBar = ({ data, mode, setMode }) => {
     <AppBar position="sticky">
       <Container>
         <StyleToolBar>
-          <Typography
-            variant="h5"
-            sx={{ display: { sm: "block", xs: "none" }, pr: 2 }}
-          >
-            CarStore
-          </Typography>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                display: { sm: "block", xs: "none" },
+                pr: 2,
+                ":hover": { cursor: "pointer" },
+              }}
+            >
+              CarStore
+            </Typography>
+          </Link>
           <DehazeIcon
             onClick={(e) => setOpenSideBar(true)}
             sx={{ display: { xs: "block", md: "none", sm: "none" }, mr: 2 }}
@@ -109,7 +118,6 @@ const NavBar = ({ data, mode, setMode }) => {
             }}
           >
             <form autoComplete="off">
-
               <TextField
                 type="search"
                 size="small"
@@ -126,18 +134,14 @@ const NavBar = ({ data, mode, setMode }) => {
                   width: { lg: "45vw", md: "60vw", sm: "55vw", xs: "70vw" },
                   borderRadius: 1.5,
                 }}
-
-                inputProps = {
-                  {
-                    sx: {
-                      '&::placeholder': {
-                        color: 'black',
-                        opacity: 1, // otherwise firefox shows a lighter color
-                      },
+                inputProps={{
+                  sx: {
+                    "&::placeholder": {
+                      color: "black",
+                      opacity: 1, // otherwise firefox shows a lighter color
                     },
-                  }
-                }
-                
+                  },
+                }}
                 InputProps={{
                   endAdornment: (
                     <Button
@@ -157,100 +161,115 @@ const NavBar = ({ data, mode, setMode }) => {
             </form>
           </Search>
 
-          <Icon>
-            {!token ? (
-              <Box width={"15%"} component="div"></Box>
-            ) : (
-              <>
-                <Switch
-                  {...label}
-                  onClick={(e) => setMode(mode === "light" ? "dark" : "light")}
-                />
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-                <Badge badgeContent={2} color="error">
-                  <NotificationsNoneIcon />
-                </Badge>
-              </>
-            )}
-            <Badge>
-              <Avatar
-                sx={{ width: "30px", height: "30px" }}
-                src="#"
-                onClick={(e) => setOpen(true)}
-              />
-            </Badge>
-          </Icon>
-          <UserBox onClick={(e) => setOpen(true)} sx={{ml: 1}}>
-            <Avatar sx={{ width: "30px", height: "30px" }} src="#" />
-          </UserBox>
-
-          <Menu
-            aria-labelledby="demo-positioned-button"
-            open={open}
-            onClose={(e) => setOpen(false)}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
+          <Grid
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <MenuItem>My account</MenuItem>
-            <MenuItem
-              onClick={() => {
-                navigat("/signup/");
+            <Icon>
+              {!token ? (
+                <Box width={"15%"} component="div"></Box>
+              ) : (
+                <>
+                  <Switch
+                    {...label}
+                    onClick={(e) =>
+                      setMode(mode === "light" ? "dark" : "light")
+                    }
+                  />
+                  <Badge badgeContent={4} color="error">
+                    <MailIcon />
+                  </Badge>
+                  <Badge badgeContent={2} color="error">
+                    <NotificationsNoneIcon />
+                  </Badge>
+                </>
+              )}
+              <Badge>
+                <Avatar
+                  sx={{ width: "30px", height: "30px" }}
+                  src="#"
+                  onClick={(e) => setOpen(true)}
+                />
+              </Badge>
+            </Icon>
+            <UserBox onClick={(e) => setOpen(true)} sx={{ ml: 1 }}>
+              <Avatar sx={{ width: "30px", height: "30px" }} src="#" />
+            </UserBox>
+
+            <Menu
+              aria-labelledby="demo-positioned-button"
+              open={open}
+              onClose={(e) => setOpen(false)}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
               }}
             >
-              Regester
-            </MenuItem>
-
-            {!token ? (
+              <MenuItem>My account</MenuItem>
               <MenuItem
                 onClick={() => {
-                  navigat("/signin/");
+                  navigat("/signup/");
                 }}
               >
-                Login
+                Regester
               </MenuItem>
-            ) : (
-              <MenuItem onClick={handleLoguot}>Logout</MenuItem>
-            )}
-          </Menu>
-          <Modal
+
+              {!token ? (
+                <MenuItem
+                  onClick={() => {
+                    navigat("/signin/");
+                  }}
+                >
+                  Login
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={handleLoguot}>Logout</MenuItem>
+              )}
+            </Menu>
+            <Typography
+              sx={{ display: {lg: 'block', md: "block", sm: "none", xs: "none" } }}
+            >
+              {username.username}
+            </Typography>
+          </Grid>
+          <Menu
+            aria-labelledby="demo-positioned-button"
             open={openSidBar}
             onClose={(e) => {
               setOpenSideBar(false);
             }}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            sx={{ mt: 5 }}
           >
-            <Paper
-              sx={{
-                display: { xs: "block", sm: "none" },
-                backgroundColor: "white",
-                width: "250px",
-                height: "100%",
+            <MenuItem
+              sx={{ height: "20vh", width: "50vw" }}
+              onClick={(e) => {
+                setOpenSideBar(false);
               }}
             >
-              <Box sx={{ display: "flex" }}>
-                <CloseIcon
-                  onClick={() => {
-                    setOpenSideBar(false);
-                  }}
-                  sx={{
-                    borderRadius: "50px",
-                    backgroundColor: "red",
-                    ml: 26,
-                    mt: 1,
-                    fontSize: "25px",
-                  }}
-                />
-                <SideBar />
-              </Box>
-            </Paper>
-          </Modal>
+              <SideBar />
+            </MenuItem>
+            <Switch
+              {...label}
+              sx={{ ml: 4 }}
+              onClick={(e) => setMode(mode === "light" ? "dark" : "light")}
+            />
+          </Menu>
+
           <Modal
             open={openSearch}
             onClose={() => {
@@ -264,16 +283,16 @@ const NavBar = ({ data, mode, setMode }) => {
               top: 70,
               position: "fixed",
             }}
+            bgcolor={"background.default"}
+            color={"text.primary"}
           >
             <Paper
               sx={{
                 width: 650,
-
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 margin: "0px auto",
-                backgroundColor: "white",
               }}
             >
               <Typography align="right">

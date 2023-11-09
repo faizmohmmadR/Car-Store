@@ -69,9 +69,6 @@ const CarDetail = () => {
                       <TableCell sx={{ fontWeight: "bold" }}>Price</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>State</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>
-                        Seeling State
-                      </TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>
                         Engin Type
                       </TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>
@@ -81,13 +78,11 @@ const CarDetail = () => {
                       <TableCell sx={{ fontWeight: "bold" }}>User</TableCell>
                     </TableRow>
                   </TableHead>
-
                   <TableBody>
                     <TableRow>
                       <TableCell>{data.name}</TableCell>
                       <TableCell>{data.price}</TableCell>
                       <TableCell>{data.carState}</TableCell>
-                      <TableCell>{data.carSellState}</TableCell>
                       <TableCell>{data.enginType}</TableCell>
                       <TableCell>{data.numberPalit}</TableCell>
                       <TableCell>{data.address}</TableCell>

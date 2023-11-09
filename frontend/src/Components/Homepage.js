@@ -24,13 +24,30 @@ const Homepage = () => {
           // justifyContent: "space-between",
         }}
       >
-        <SideBar setMode={setMode} mode={mode} />
-        <Grid sx={{ margin: "6% auto" }}>
+        <Grid
+          sx={{
+            display: { xs: "none", sm: "block", lg: "blokc", md: "block" },
+          }}
+        >
+          <SideBar setMode={setMode} mode={mode} />
+        </Grid>
+
+        <Grid
+          sx={{
+            margin: "0px auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: "15%",
+          }}
+        >
           <Typography
             align="center"
             sx={{
               fontSize: { xs: "2em", lg: "5em", md: "5em", sm: "4em" },
-              mr: { lg: "20%" },
+              ":hover": { transform: "scale(1.4,1.4)",color: 'wheat' },
+              transition: "transform 4s",
             }}
             variant="h1"
           >

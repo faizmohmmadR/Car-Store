@@ -12,7 +12,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-const Footer = () => {
+const Footer = ({mode}) => {
   return (
     <Box
       style={{
@@ -55,6 +55,7 @@ const Footer = () => {
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
               Connect With Us
+              {console.log(mode)}
             </Typography>
             <Box sx={{ display: "flex" }}>
               <IconButton href="#" target="_blank" rel="noopener noreferrer">
