@@ -16,11 +16,10 @@ import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import { Link, useNavigate } from "react-router-dom";
-const SideBar = ({ mode, setMode }) => {
+const MobileSidebar = ({ mode, setMode }) => {
   const navigat = useNavigate();
   return (
     <Box
-      position="fixed"
       component="div"
       sx={{
         width: "15vw",
@@ -32,11 +31,7 @@ const SideBar = ({ mode, setMode }) => {
         <ListItem disablePadding>
           <ListItemButton component="a">
             <ListItemIcon>
-              <HomeIcon
-                sx={{
-                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
-                }}
-              />
+              <HomeIcon />
             </ListItemIcon>
             <ListItemText
               primary="Home"
@@ -49,11 +44,7 @@ const SideBar = ({ mode, setMode }) => {
         <ListItem disablePadding>
           <ListItemButton component="a">
             <ListItemIcon>
-              <PagesIcon
-                sx={{
-                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
-                }}
-              />
+              <PagesIcon />
             </ListItemIcon>
             <ListItemText
               primary="AboutUS"
@@ -64,13 +55,9 @@ const SideBar = ({ mode, setMode }) => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a">
+          <ListItemButton component="a" href="store">
             <ListItemIcon>
-              <StoreIcon
-                sx={{
-                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
-                }}
-              />
+              <StoreIcon />
             </ListItemIcon>
             <ListItemText
               primary="ContactUS"
@@ -83,11 +70,7 @@ const SideBar = ({ mode, setMode }) => {
         <ListItem disablePadding>
           <ListItemButton component="a">
             <ListItemIcon>
-              <AccountBoxIcon
-                sx={{
-                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
-                }}
-              />
+              <AccountBoxIcon />
             </ListItemIcon>
             <ListItemText
               onClick={() => {
@@ -100,11 +83,7 @@ const SideBar = ({ mode, setMode }) => {
         <ListItem disablePadding sx={{ display: { xs: "none" } }}>
           <ListItemButton component="a">
             <ListItemIcon>
-              <ModeNightIcon
-                sx={{
-                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
-                }}
-              />
+              <ModeNightIcon />
             </ListItemIcon>
             <Switch
               onClick={(e) => setMode(mode === "light" ? "dark" : "light")}
@@ -116,4 +95,4 @@ const SideBar = ({ mode, setMode }) => {
   );
 };
 
-export default SideBar;
+export default MobileSidebar;
