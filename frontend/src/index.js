@@ -14,6 +14,7 @@ import UpdateCar from "./Components/car/UpdateCar";
 import App from "./Components/App";
 import ContactUs from "./Components/layout/ContactUs";
 import AboutUs from "./Components/layout/AboutUs";
+import Homepage from "./Components/Homepage";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,11 @@ const router = createBrowserRouter([
   {
     path: "/update/:id/",
     element: <UpdateCar />,
+  },
+
+  {
+    path: "/test/",
+    element: <Feed />,
   },
 ]);
 

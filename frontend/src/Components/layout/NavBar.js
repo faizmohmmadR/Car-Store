@@ -14,6 +14,7 @@ import {
   Modal,
   Container,
 } from "@mui/material";
+import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -59,8 +60,8 @@ const UserBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const NavBar = (props) => {
-  const data = props.data;
+const NavBar = ({ data, mode, setMode }) => {
+  const label = { inputProps: { "aria-label": "Switch demo" } };
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const [openSidBar, setOpenSideBar] = useState(false);
@@ -85,13 +86,13 @@ const NavBar = (props) => {
         <StyleToolBar>
           <Typography
             variant="h5"
-            sx={{ display: { sm: "block", xs: "none" } }}
+            sx={{ display: { sm: "block", xs: "none" }, pr: 2 }}
           >
             CarStore
           </Typography>
           <DehazeIcon
             onClick={(e) => setOpenSideBar(true)}
-            sx={{ display: { xs: "block", md: "none", sm: "none" } }}
+            sx={{ display: { xs: "block", md: "none", sm: "none" }, mr: 2 }}
           />
           <DirectionsCarIcon
             sx={{
@@ -108,6 +109,7 @@ const NavBar = (props) => {
             }}
           >
             <form autoComplete="off">
+
               <TextField
                 type="search"
                 size="small"
@@ -124,6 +126,18 @@ const NavBar = (props) => {
                   width: { lg: "45vw", md: "60vw", sm: "55vw", xs: "70vw" },
                   borderRadius: 1.5,
                 }}
+
+                inputProps = {
+                  {
+                    sx: {
+                      '&::placeholder': {
+                        color: 'black',
+                        opacity: 1, // otherwise firefox shows a lighter color
+                      },
+                    },
+                  }
+                }
+                
                 InputProps={{
                   endAdornment: (
                     <Button
@@ -148,6 +162,10 @@ const NavBar = (props) => {
               <Box width={"15%"} component="div"></Box>
             ) : (
               <>
+                <Switch
+                  {...label}
+                  onClick={(e) => setMode(mode === "light" ? "dark" : "light")}
+                />
                 <Badge badgeContent={4} color="error">
                   <MailIcon />
                 </Badge>
@@ -164,7 +182,7 @@ const NavBar = (props) => {
               />
             </Badge>
           </Icon>
-          <UserBox onClick={(e) => setOpen(true)}>
+          <UserBox onClick={(e) => setOpen(true)} sx={{ml: 1}}>
             <Avatar sx={{ width: "30px", height: "30px" }} src="#" />
           </UserBox>
 

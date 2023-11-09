@@ -19,44 +19,75 @@ import { Link, useNavigate } from "react-router-dom";
 const SideBar = ({ mode, setMode }) => {
   const navigat = useNavigate();
   return (
-    <Box position="fixed" component="div">
-      <List>
+    <Box
+      component="div"
+      sx={{
+        width: "15vw",
+        display: { xs: "none", sm: "block", lg: "blokc", md: "block" },
+      }}
+    >
+      <List
+        sx={{ color: { xs: "gray", lg: "white", sm: "white", md: "white" } }}
+      >
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#home">
+          <ListItemButton component="a">
             <ListItemIcon>
-              <HomeIcon />
+              <HomeIcon
+                sx={{
+                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
+                }}
+              />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText
+              primary="Home"
+              onClick={() => {
+                navigat("/");
+              }}
+            />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#pages">
+          <ListItemButton component="a">
             <ListItemIcon>
-              <PagesIcon />
+              <PagesIcon
+                sx={{
+                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
+                }}
+              />
             </ListItemIcon>
-            <ListItemText primary="Pages" />
+            <ListItemText
+              primary="AboutUS"
+              onClick={() => {
+                navigat("/aboutus/");
+              }}
+            />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#store">
+          <ListItemButton component="a" href="store">
             <ListItemIcon>
-              <StoreIcon />
+              <StoreIcon
+                sx={{
+                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
+                }}
+              />
             </ListItemIcon>
-            <ListItemText primary="Store" />
+            <ListItemText
+              primary="ContactUS"
+              onClick={() => {
+                navigat("/contuctus/");
+              }}
+            />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#setting">
+          <ListItemButton component="a">
             <ListItemIcon>
-              <SettingsApplicationsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Setting" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="#profile">
-            <ListItemIcon>
-              <AccountBoxIcon />
+              <AccountBoxIcon
+                sx={{
+                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
+                }}
+              />
             </ListItemIcon>
             <ListItemText
               onClick={() => {
@@ -66,13 +97,17 @@ const SideBar = ({ mode, setMode }) => {
             />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="#">
+        <ListItem disablePadding sx={{ display: { xs: "none" } }}>
+          <ListItemButton component="a">
             <ListItemIcon>
-              <ModeNightIcon />
+              <ModeNightIcon
+                sx={{
+                  color: { xs: "gray", lg: "white", sm: "white", md: "white" },
+                }}
+              />
             </ListItemIcon>
             <Switch
-              onChange={(e) => setMode(mode === "light" ? "dark" : "light")}
+              onClick={(e) => setMode(mode === "light" ? "dark" : "light")}
             />
           </ListItemButton>
         </ListItem>

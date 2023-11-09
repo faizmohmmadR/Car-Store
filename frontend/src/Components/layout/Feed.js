@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { getAllCars } from "../../Api";
 import Cars from "../car/Cars";
 import Slider from "../slider/Slider";
+import Homepage from "../Homepage";
 
 const Feed = (props) => {
   localStorage.setItem("redirectURL", window.location.href);
@@ -19,9 +20,19 @@ const Feed = (props) => {
   } else if (isSuccess)
     return (
       <>
-        <Slider data={data} />
-
-        <Grid bgcolor={"#e6edf7"} color={"#34164a"} padding={"10px"}>
+        <Homepage />
+        <Grid
+          padding={"10px"}
+          item
+          sm={12}
+          xs={12}
+          md={6}
+          lg={4}
+          sx={{
+            width: { lg: "76%", md: "72%", sm: "72%", xs: "90%" },
+            margin: '0px auto'
+          }}
+        >
           <Typography variant="h3" align="center">
             Products
           </Typography>
