@@ -65,7 +65,10 @@ const UserBox = styled(Box)(({ theme }) => ({
 const NavBar = ({ data, mode, setMode }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const token = localStorage.getItem("token");
-  const username = JSON.parse(localStorage.getItem("user"));
+  let username = ''
+   if(JSON.parse(localStorage.getItem("user"))){
+    username = JSON.parse(localStorage.getItem("user"))
+   }
   const [open, setOpen] = useState(false);
   const [openSidBar, setOpenSideBar] = useState(false);
   const [search, setSearch] = useState("");
